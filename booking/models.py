@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.contrib import admin
 
 
 class Foreigner(models.Model):
@@ -36,6 +37,10 @@ class Person(models.Model):
         db_table = 'person'
 
 
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ('pname', 'tid', 'skey')
+
+
 class Station(models.Model):
     sid = models.CharField(primary_key=True, max_length=4)
     sname = models.CharField(max_length=4)
@@ -44,6 +49,10 @@ class Station(models.Model):
     class Meta:
         managed = False
         db_table = 'station'
+
+
+class StationAdmin(admin.ModelAdmin):
+    list_display = ('sid', 'sname', 'slevel')
 
 
 class StopAt(models.Model):
@@ -72,6 +81,10 @@ class Ticket(models.Model):
         db_table = 'ticket'
 
 
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ('tid', 'geton', 'getoff', 'tdate', 'ttype')
+
+
 class Train(models.Model):
     tid = models.CharField(primary_key=True, max_length=4)
     beg = models.CharField(max_length=4)
@@ -82,3 +95,7 @@ class Train(models.Model):
     class Meta:
         managed = False
         db_table = 'train'
+
+
+class TrainAdmin(admin.ModelAdmin):
+    list_display = ('tid', 'beg', 'dest')

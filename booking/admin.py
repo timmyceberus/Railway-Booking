@@ -7,7 +7,8 @@ class PersonAdmin(admin.ModelAdmin):
 
 
 class StationAdmin(admin.ModelAdmin):
-    list_display = ('sid', 'sname', 'slevel')
+    list_display = ('sid', 'sname')
+    search_fields = ('sname',)
 
 
 class TicketAdmin(admin.ModelAdmin):

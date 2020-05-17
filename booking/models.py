@@ -39,7 +39,6 @@ class Person(models.Model):
 class Station(models.Model):
     sid = models.CharField(primary_key=True, max_length=4)
     sname = models.CharField(max_length=4)
-    slevel = models.IntegerField()
 
     class Meta:
         managed = False
@@ -75,6 +74,7 @@ class Ticket(models.Model):
     class Meta:
         managed = False
         db_table = 'ticket'
+        unique_together = (('tdate', 'ttrain', 'cno', 'sno'),)
 
 
 class Train(models.Model):

@@ -6,11 +6,10 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from django.contrib import admin
 
 
 class Foreigner(models.Model):
-    skey = models.ForeignKey('Person', models.DO_NOTHING, db_column='skey')
+    pkind = models.ForeignKey('Person', models.DO_NOTHING, db_column='pkind')
     psp_no = models.CharField(primary_key=True, max_length=9)
 
     class Meta:
@@ -19,7 +18,7 @@ class Foreigner(models.Model):
 
 
 class Native(models.Model):
-    skey = models.ForeignKey('Person', models.DO_NOTHING, db_column='skey')
+    pkind = models.ForeignKey('Person', models.DO_NOTHING, db_column='pkind')
     ssn = models.CharField(primary_key=True, max_length=10)
 
     class Meta:
@@ -28,17 +27,13 @@ class Native(models.Model):
 
 
 class Person(models.Model):
-    skey = models.IntegerField(primary_key=True)
+    pkind = models.IntegerField(primary_key=True)
     pname = models.CharField(max_length=15)
     tid = models.ForeignKey('Train', models.DO_NOTHING, db_column='tid')
 
     class Meta:
         managed = False
         db_table = 'person'
-
-
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ('pname', 'tid', 'skey')
 
 
 class Station(models.Model):
@@ -51,13 +46,11 @@ class Station(models.Model):
         db_table = 'station'
 
 
-class StationAdmin(admin.ModelAdmin):
-    list_display = ('sid', 'sname', 'slevel')
-
-
 class StopAt(models.Model):
     sid = models.OneToOneField(Station, models.DO_NOTHING, db_column='sid', primary_key=True)
     tid = models.ForeignKey('Train', models.DO_NOTHING, db_column='tid')
+    arrtime = models.TimeField()
+    levtime = models.TimeField()
 
     class Meta:
         managed = False
@@ -67,35 +60,31 @@ class StopAt(models.Model):
 
 class Ticket(models.Model):
     tid = models.CharField(primary_key=True, max_length=15)
-    geton = models.CharField(max_length=4)
-    getoff = models.CharField(max_length=4)
+    geton = models.ForeignKey(Station, models.DO_NOTHING, db_column='geton', related_name='geton')
+    getoff = models.ForeignKey(Station, models.DO_NOTHING, db_column='getoff', related_name='getoff')
     price = models.IntegerField()
+    ttrain = models.ForeignKey('Train', models.DO_NOTHING, db_column='ttrain')
     cno = models.IntegerField()
     sno = models.IntegerField()
-    tdate = models.DateTimeField()
+    tdate = models.DateField()
+    ontime = models.TimeField()
+    offtime = models.TimeField()
     ttype = models.IntegerField()
-    skey = models.ForeignKey(Person, models.DO_NOTHING, db_column='skey')
+    pkind = models.ForeignKey(Person, models.DO_NOTHING, db_column='pkind')
 
     class Meta:
         managed = False
         db_table = 'ticket'
 
 
-class TicketAdmin(admin.ModelAdmin):
-    list_display = ('tid', 'geton', 'getoff', 'tdate', 'ttype')
-
-
 class Train(models.Model):
     tid = models.CharField(primary_key=True, max_length=4)
-    beg = models.CharField(max_length=4)
-    dest = models.CharField(max_length=4)
+    beg = models.ForeignKey(Station, models.DO_NOTHING, db_column='beg', related_name='beg')
+    dest = models.ForeignKey(Station, models.DO_NOTHING, db_column='dest', related_name='dest')
     kind = models.IntegerField()
     line_no = models.IntegerField()
+    dir = models.IntegerField()
 
     class Meta:
         managed = False
         db_table = 'train'
-
-
-class TrainAdmin(admin.ModelAdmin):
-    list_display = ('tid', 'beg', 'dest')

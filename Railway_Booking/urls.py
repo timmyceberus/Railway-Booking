@@ -15,15 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from booking.views import showIndex
+from booking.views import show_index
 from rest_framework.routers import DefaultRouter
 from booking import views
 
 router = DefaultRouter()
-router.register(r'station', views.stationViewSet)
+router.register(r'station', views.StationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', showIndex),
+    path('', show_index),
     path('api/', include(router.urls))
 ]

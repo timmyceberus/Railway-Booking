@@ -24,7 +24,7 @@ let stations, counties;
 function getData() {
     return new Promise(((resolve, reject) => {
         $.ajax({
-            url: 'api/station',
+            url: '/api/station/',
             success: function (data) {
                 resolve(data)
             }
@@ -46,23 +46,16 @@ async function init() {
     stations = await getData();
     counties = getCounty();
 
-    const begin_block = $('.begin-station-select .county');
-    const dest_block = $('.dest-station-select .county');
+    const beginBlock = $('.begin-block .county');
+    const destBlock = $('.dest-block .county');
 
     counties.forEach(county => {
-        $(`<button class="btn btn-outline-primary btn-sm m-1 county-btn" type="button">${county}</button>`).appendTo(begin_block);
-        $(`<button class="btn btn-outline-danger btn-sm m-1 county-btn" type="button">${county}</button>`).appendTo(dest_block);
+        $(`<button class="btn btn-outline-primary btn-sm county-btn" type="button">${county}</button>`).appendTo(beginBlock);
+        $(`<button class="btn btn-outline-danger btn-sm county-btn" type="button">${county}</button>`).appendTo(destBlock);
     });
 }
 
 init();
-
-$(document).on('click', '.begin-station-select-btn', function () {
-    const block = $('.begin-station-select');
-    block.css({left: $(this).offset().left, top: $(this).offset().top + 38})
-    block.toggle();
-
-})
 
 $(document).on('click', '.dest-station-select-btn', function () {
     const block = $('.dest-station-select');
@@ -74,3 +67,11 @@ $(document).on('click', '.county-btn', function () {
     $(this).siblings().removeClass('active');
     $(this).toggleClass('active');
 })
+
+$(document).on('click', '.dropdown-menu', function (e) {
+
+    // When user clicked on county button, don't hide the dropdown menu
+    if(!$(e.target).hasClass('station-btn')){
+        e.stopPropagation();
+    }
+});

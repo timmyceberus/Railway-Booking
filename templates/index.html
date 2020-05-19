@@ -17,15 +17,27 @@
 
 <div class="container">
     <div class="board">
-        <div class="begin-block"></div>
-        <div class="dest-block"></div>
         <form method="post">
             {% csrf_token %}
-            車站 <input type="text" name="station">
+            <div class="begin-block">
+                <button class="btn btn-primary begin-station-select-btn" type="button">起點車站</button>
+                <div class="bg-light begin-station-select" style="display: none">
+                    <div class="county"></div>
+                </div>
+            </div>
+            <div class="dest-block">
+                <button class="btn btn-danger dest-station-select-btn" type="button">終點車站</button>
+                <div class="bg-light dest-station-select" style="display: none">
+                    <div class="county"></div>
+                </div>
+            </div>
             <button type="submit">Submit</button>
         </form>
-        <p></p>
     </div>
+</div>
+
+<div>
+
 </div>
 <script src="{% static "/script.js" %}"></script>
 </body>

@@ -26,6 +26,21 @@ body {
     display: flex;
     background-color: rgba(0, 0, 0, 0.3);
     justify-content: center;
-    align-items: center;
     height: 100%;
+    padding-top: 10%;
+}
+
+.begin-station-select,
+.dest-station-select {
+    position: absolute;
+    display: inline-block;
+    width: 518px;
+}
+
+.county {
+    display: inline-block;
+}
+
+.county-btn {
+    margin: 2px;
 }

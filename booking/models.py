@@ -39,6 +39,7 @@ class Person(models.Model):
 class Station(models.Model):
     sid = models.CharField(primary_key=True, max_length=4)
     sname = models.CharField(max_length=4)
+    cty = models.CharField(max_length=3)
 
     class Meta:
         managed = False
@@ -48,8 +49,9 @@ class Station(models.Model):
 class StopAt(models.Model):
     sid = models.OneToOneField(Station, models.DO_NOTHING, db_column='sid', primary_key=True)
     tid = models.ForeignKey('Train', models.DO_NOTHING, db_column='tid')
+    torder = models.IntegerField()
     arrtime = models.TimeField()
-    levtime = models.TimeField()
+    deptime = models.TimeField()
 
     class Meta:
         managed = False
@@ -79,8 +81,6 @@ class Ticket(models.Model):
 
 class Train(models.Model):
     tid = models.CharField(primary_key=True, max_length=4)
-    beg = models.ForeignKey(Station, models.DO_NOTHING, db_column='beg', related_name='beg')
-    dest = models.ForeignKey(Station, models.DO_NOTHING, db_column='dest', related_name='dest')
     kind = models.IntegerField()
     line_no = models.IntegerField()
     dir = models.IntegerField()

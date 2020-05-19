@@ -16,7 +16,7 @@ class TicketAdmin(admin.ModelAdmin):
 
 
 class TrainAdmin(admin.ModelAdmin):
-    list_display = ('tid', 'beg', 'dest')
+    list_display = ('tid', )
 
 
 # Register your models here.

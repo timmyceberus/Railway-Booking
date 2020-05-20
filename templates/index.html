@@ -23,7 +23,7 @@
 
 <div class="container">
     <div class="board">
-        <form method="post">
+        <form method="get">
             {% csrf_token %}
             <div class="begin-block">
                 <div class="input-group mb-3">
@@ -38,7 +38,7 @@
                             <div class="station"></div>
                         </div>
                     </div>
-                    <div type="text" class="form-control begin-text" style="pointer-events:none"></div>
+                    <input type="text" class="form-control begin-text" name="begin_station" >
                 </div>
             </div>
             <div class="dest-block">
@@ -54,7 +54,7 @@
                             <div class="station"></div>
                         </div>
                     </div>
-                    <div type="text" class="form-control dest-text" style="pointer-events:none"></div>
+                    <input type="text" class="form-control" name="dest_station" style="pointer-events:none">
                 </div>
             </div>
             <button type="submit">Submit</button>

@@ -11,10 +11,8 @@ async function init() {
         $(`<button class="btn btn-outline-primary btn-sm county-btn" type="button">${county}</button>`).appendTo(beginBlock);
         $(`<button class="btn btn-outline-danger btn-sm county-btn" type="button">${county}</button>`).appendTo(destBlock);
     });
-
-
-
 }
+
 init();
 
 function getData() {
@@ -38,19 +36,25 @@ function getCounty() {
     return counties;
 }
 
-
 $('form').on('submit', function (event) {
     event.preventDefault();
 
-    let stationName;
+    let beginStationName, destStationName;
     $(this).serializeArray().forEach(element => { // Get values from 'form'
-        if (element['name'] === 'station')
-            stationName = element['value'];
+        if (element['name'] === 'begin_station')
+            beginStationName = element['value'];
+        if(element['name']==='dest_station')
+            destStationName = element['value'];
     });
 
 
     $.ajax({ // Asyn request
-        url: `api/station?sname=${stationName}`,
+        url: `station`,
+        data:{
+            'begin_station': beginStationName,
+            'dest_station': destStationName
+        },
+        dataType: 'json',
         success: function (data) { // When request success
             const station = data[0]; // Data
         },
@@ -127,5 +131,3 @@ $(document).on('click', '.dropdown-menu', function (event) {
         event.stopPropagation();
     }
 });
-
-

@@ -3,7 +3,6 @@ let stations, counties;
 async function init() {
     stations = await getData();
     counties = getCounty();
-    console.log(stations)
 
     const beginBlock = $('.begin-block .county');
     const destBlock = $('.dest-block .county');
@@ -66,30 +65,60 @@ $(document).on('click', '.county-btn', function () {
     $(this).siblings().removeClass('active');
     $(this).addClass('active');
 
-    $(".station").empty();
 
-    let station_filter = [];
+})
+$(document).on('click', '.btn-outline-primary', function (){
+    $(".begin-block.station").empty();
+
+    let station_filter_b = [];
 
     for (let i = 0;i <stations.length ;i ++){
         if ($(this).text().indexOf(stations[i]['cty'])!==-1){
-            station_filter.push(stations[i]['sname']);
+            station_filter_b.push(stations[i]['sname']);
         }
     }
-    console.log(station_filter)
+
     const beginBlock_station = $('.begin-block .station');
 
-
-
-    station_filter.forEach(station=>{
+    station_filter_b.forEach(station=>{
         $(`<button class="btn btn-outLine-primary btn-sm station-btn" type="button">${station}</button>`).appendTo(beginBlock_station);
     });
-
-    //btn-outLine-primary btn-sm
-    // console.log($(this).text())
 })
 
-$(document).on('click', '.station-btn', function () {
-    $(this).siblings().removeClass('station-btn');
+$(document).on('click',  '.station-btn', function (){
+    if($(this).hasClass('btn-outLine-primary')){
+        const beginBlock_text = $('.begin-block .begin-text');
+        beginBlock_text.empty()
+        const contain = $(this).text()
+
+        $(`<div >${contain}</div>`).appendTo(beginBlock_text);
+    }
+    else if ($(this).hasClass('btn-outLine-danger')){
+        const destBlock_text = $('.dest-block .dest-text');
+        destBlock_text.empty()
+        const contain = $(this).text()
+
+        $(`<div >${contain}</div>`).appendTo(destBlock_text);
+    }
+})
+
+$(document).on('click',  '.btn-outline-danger', function (){
+    $(".dest-block.station").empty();
+
+    let station_filter_d = [];
+
+    for (let i = 0;i <stations.length ;i ++){
+        if ($(this).text().indexOf(stations[i]['cty'])!==-1){
+            station_filter_d .push(stations[i]['sname']);
+        }
+    }
+
+    const destBlock_station = $('.dest-block .station');
+
+    station_filter_d.forEach(station=>{
+        $(`<button class="btn btn-outLine-danger btn-sm station-btn" type="button">${station}</button>`).appendTo(destBlock_station);
+    });
+
 })
 
 $(document).on('click', '.dropdown-menu', function (event) {

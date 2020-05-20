@@ -50,6 +50,7 @@ form {
     display: inline-block;
 }
 
-.county-btn {
+.county-btn,
+.station-btn {
     margin: 2px 2px;
 }

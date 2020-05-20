@@ -72,7 +72,7 @@ $(document).on('click', '.county-btn', function () {
 
 })
 $(document).on('click', '.btn-outline-primary', function (){
-    $(".begin-block.station").empty();
+    $(".begin-block .station").empty();
 
     let station_filter_b = [];
 
@@ -85,19 +85,19 @@ $(document).on('click', '.btn-outline-primary', function (){
     const beginBlock_station = $('.begin-block .station');
 
     station_filter_b.forEach(station=>{
-        $(`<button class="btn btn-outLine-primary btn-sm station-btn" type="button">${station}</button>`).appendTo(beginBlock_station);
+        $(`<button class="btn btn-outline-primary btn-sm station-btn" type="button">${station}</button>`).appendTo(beginBlock_station);
     });
 })
 
 $(document).on('click',  '.station-btn', function (){
-    if($(this).hasClass('btn-outLine-primary')){
+    if($(this).hasClass('btn-outline-primary')){
         const beginBlock_text = $('.begin-block .begin-text');
         beginBlock_text.empty()
         const contain = $(this).text()
 
         $(`<div >${contain}</div>`).appendTo(beginBlock_text);
     }
-    else if ($(this).hasClass('btn-outLine-danger')){
+    else if ($(this).hasClass('btn-outline-danger')){
         const destBlock_text = $('.dest-block .dest-text');
         destBlock_text.empty()
         const contain = $(this).text()
@@ -107,7 +107,7 @@ $(document).on('click',  '.station-btn', function (){
 })
 
 $(document).on('click',  '.btn-outline-danger', function (){
-    $(".dest-block.station").empty();
+    $(".dest-block .station").empty();
 
     let station_filter_d = [];
 
@@ -120,7 +120,7 @@ $(document).on('click',  '.btn-outline-danger', function (){
     const destBlock_station = $('.dest-block .station');
 
     station_filter_d.forEach(station=>{
-        $(`<button class="btn btn-outLine-danger btn-sm station-btn" type="button">${station}</button>`).appendTo(destBlock_station);
+        $(`<button class="btn btn-outline-danger btn-sm station-btn" type="button">${station}</button>`).appendTo(destBlock_station);
     });
 
 })

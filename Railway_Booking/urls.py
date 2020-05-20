@@ -15,16 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from booking.views import show_index, get_stations
-from rest_framework.routers import DefaultRouter
 from booking import views
 
-router = DefaultRouter()
-router.register(r'station', views.StationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', show_index),
-    path('api/', include(router.urls)),
-    path('station/', get_stations)
+    path('', views.show_index),
+    path('station/', views.get_stations),
+    path('allstations/', views.get_all_stations)
 ]

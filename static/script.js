@@ -17,8 +17,8 @@ init();
 
 function getData() {
     return new Promise(((resolve, reject) => {
-        $.ajax({
-            url: '/api/station/',
+        $.get({
+            url: 'allstations',
             success: function (data) {
                 resolve(data)
             }
@@ -43,14 +43,14 @@ $('form').on('submit', function (event) {
     $(this).serializeArray().forEach(element => { // Get values from 'form'
         if (element['name'] === 'begin_station')
             beginStationName = element['value'];
-        if(element['name']==='dest_station')
+        if (element['name'] === 'dest_station')
             destStationName = element['value'];
     });
 
 
     $.ajax({ // Asyn request
         url: `station`,
-        data:{
+        data: {
             'begin_station': beginStationName,
             'dest_station': destStationName
         },
@@ -64,40 +64,41 @@ $('form').on('submit', function (event) {
     });
 });
 
+
 $(document).on('click', '.county-btn', function () {
     //let bottom in it's siblings only bright one
     $(this).siblings().removeClass('active');
     $(this).addClass('active');
-
-
 })
-$(document).on('click', '.btn-outline-primary', function (){
+
+
+$(document).on('click', '.begin-block .county-btn', function () {
     $(".begin-block .station").empty();
 
     let station_filter_b = [];
 
-    for (let i = 0;i <stations.length ;i ++){
-        if ($(this).text().indexOf(stations[i]['cty'])!==-1){
+    for (let i = 0; i < stations.length; i++) {
+        if ($(this).text().indexOf(stations[i]['cty']) !== -1) {
             station_filter_b.push(stations[i]['sname']);
         }
     }
 
     const beginBlock_station = $('.begin-block .station');
 
-    station_filter_b.forEach(station=>{
+    station_filter_b.forEach(station => {
         $(`<button class="btn btn-outline-primary btn-sm station-btn" type="button">${station}</button>`).appendTo(beginBlock_station);
     });
 })
 
-$(document).on('click',  '.station-btn', function (){
-    if($(this).hasClass('btn-outline-primary')){
+$(document).on('click', '.station-btn', function () {
+    if ($(this).hasClass('btn-outline-primary')) {
         const beginBlock_text = $('.begin-block .begin-text');
         beginBlock_text.empty()
         const contain = $(this).text()
 
         $(`<div >${contain}</div>`).appendTo(beginBlock_text);
-    }
-    else if ($(this).hasClass('btn-outline-danger')){
+
+    } else if ($(this).hasClass('btn-outline-danger')) {
         const destBlock_text = $('.dest-block .dest-text');
         destBlock_text.empty()
         const contain = $(this).text()
@@ -106,20 +107,20 @@ $(document).on('click',  '.station-btn', function (){
     }
 })
 
-$(document).on('click',  '.btn-outline-danger', function (){
+$(document).on('click', '.dest-block .county-btn', function () {
     $(".dest-block .station").empty();
 
     let station_filter_d = [];
 
-    for (let i = 0;i <stations.length ;i ++){
-        if ($(this).text().indexOf(stations[i]['cty'])!==-1){
-            station_filter_d .push(stations[i]['sname']);
+    for (let i = 0; i < stations.length; i++) {
+        if ($(this).text().indexOf(stations[i]['cty']) !== -1) {
+            station_filter_d.push(stations[i]['sname']);
         }
     }
 
     const destBlock_station = $('.dest-block .station');
 
-    station_filter_d.forEach(station=>{
+    station_filter_d.forEach(station => {
         $(`<button class="btn btn-outline-danger btn-sm station-btn" type="button">${station}</button>`).appendTo(destBlock_station);
     });
 
@@ -127,7 +128,7 @@ $(document).on('click',  '.btn-outline-danger', function (){
 
 $(document).on('click', '.dropdown-menu', function (event) {
     // When user not clicked on the station buttons, don't hide the dropdown menu
-    if(!$(event.target).hasClass('station-btn')){
+    if (!$(event.target).hasClass('station-btn')) {
         event.stopPropagation();
     }
 });

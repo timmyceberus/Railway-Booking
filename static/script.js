@@ -77,24 +77,71 @@ function getCtyStations(stationCty) {
 /**
  * @param {Array} trains - List of train data get from Django.
  * */
-function createStationTable(trains) {
+async function createStationTable(trains) {
     const table = $('.station-table');
     const tbody = table.find('tbody');
 
-    table.show();
+    $('form').css('top', '0vh'); // A slide effect of form from middle to top
 
+    if(!table.is(':visible')) // When table is not visible, wait for the form move to the top for 700ms.
+        await sleep(700);
+
+    tbody.empty();
     trains.forEach(train => {
+        let kind;
+        switch (train['kind']) {
+            case 0:
+                kind = '自強';
+                break;
+            case 1:
+                kind = '莒光';
+                break;
+            case 2:
+                kind = '復興';
+                break;
+        }
+
+        let line;
+        switch (train['line_no']) {
+            case 0:
+                line = '-';
+                break;
+            case 1:
+                line = '山線';
+                break;
+            case 2:
+                line = '海線';
+                break;
+            case 3:
+                line = '成追';
+                break;
+        }
+
         $('<tr>').append(
-            $('<td>').text(train['tid']),
+            $('<td>').text(`${kind} ${train['tid']}`),
             $('<td>').text(train['begin_time']),
             $('<td>').text(train['dest_time']),
-            $('<td>').text(train['kind']),
-            $('<td>').text(train['line_no']),
+            $('<td>'),
+            $('<td>').text(line),
             $('<td>'),
             $('<td>')
         ).appendTo(tbody);
-    })
+    });
+
+    table.fadeIn(300);
 }
+
+/**
+ * @param {Number} ms - Set sleep time.
+ * */
+function sleep(ms=1000){
+    return new Promise(((resolve, reject) => {
+        setTimeout(()=>{
+            resolve()
+        }, ms)
+    }))
+}
+
 
 $('form').on('submit', function (event) {
     event.preventDefault();

@@ -20,18 +20,17 @@ body {
 }
 
 .container {
-    height: 100%;
-}
-
-.board {
+    padding-top: 30px;
+    min-height: 100%;
     background-color: rgba(0, 0, 0, 0.3);
-    padding-top: 10%;
-    padding-bottom: 10%;
 }
 
 form {
     display: flex;
     justify-content: center;
+    position: relative;
+    top: 40vh;
+    transition: all 0.7s cubic-bezier(0, 0, 0.2, 1.11);
 }
 
 .begin-block,
@@ -59,5 +58,10 @@ form {
 .station-table {
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(10px) brightness(170%);
+    backdrop-filter: blur(10px);
+    color: white;
+}
+
+.station-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }

@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="zh-tw" name="viewport" content="width=device-width, initial-scale=1">
 <head>
-    {% csrf_token %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script
@@ -24,56 +23,56 @@
 <div class="mask"></div>
 
 <div class="container">
-    <div class="board">
-        <form method="get">
-            {% csrf_token %}
-            <div class="begin-block">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-primary dropdown-toggle" type="button"
-                                data-toggle="dropdown"
-                        >出發站
-                        </button>
-                        <div class="dropdown-menu">
-                            <div class="county"></div>
-                            <div role="separator" class="dropdown-divider"></div>
-                            <div class="station"></div>
-                        </div>
+    <form method="get">
+        {% csrf_token %}
+        <div class="begin-block">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button class="btn btn-primary dropdown-toggle" type="button"
+                            data-toggle="dropdown"
+                    >出發站
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="county"></div>
+                        <div role="separator" class="dropdown-divider"></div>
+                        <div class="station"></div>
                     </div>
-                    <input type="text" class="form-control begin-text" name="begin_station" style="pointer-events:none">
                 </div>
+                <input type="text" class="form-control begin-text" name="begin_station" style="pointer-events:none">
             </div>
-            <div class="dest-block">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-danger dropdown-toggle" type="button"
-                                data-toggle="dropdown"
-                        >抵達站
-                        </button>
-                        <div class="dropdown-menu">
-                            <div class="county"></div>
-                            <div role="separator" class="dropdown-divider"></div>
-                            <div class="station"></div>
-                        </div>
+        </div>
+        <div class="dest-block">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button class="btn btn-danger dropdown-toggle" type="button"
+                            data-toggle="dropdown"
+                    >抵達站
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="county"></div>
+                        <div role="separator" class="dropdown-divider"></div>
+                        <div class="station"></div>
                     </div>
-                    <input type="text" class="form-control dest-text" name="dest_station" style="pointer-events:none">
                 </div>
+                <input type="text" class="form-control dest-text" name="dest_station" style="pointer-events:none">
             </div>
-            <input type="time" name="time" value="06:00">
+        </div>
+        <input type="time" name="time" value="06:00">
 
-            <button type="submit">Submit</button>
-        </form>
-        <table class="table table-hover table-sm station-table" style="display: none">
+        <button type="submit">Submit</button>
+    </form>
+    <div style="padding-left: 5px; padding-right: 5px; padding-bottom: 1px; backdrop-filter: blur(10px);">
+        <table class="table station-table" style="display: none">
             <thead>
-                <tr>
-                    <td>車種車次</td>
-                    <td>出發時間</td>
-                    <td>抵達時間</td>
-                    <td>行駛時間</td>
-                    <td>經由</td>
-                    <td>票價</td>
-                    <td>訂票</td>
-                </tr>
+            <tr>
+                <th>車種車次</th>
+                <th>出發時間</th>
+                <th>抵達時間</th>
+                <th>行駛時間</th>
+                <th>經由</th>
+                <th>票價</th>
+                <th>訂票</th>
+            </tr>
             </thead>
             <tbody>
             </tbody>

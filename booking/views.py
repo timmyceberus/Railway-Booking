@@ -40,7 +40,7 @@ def search_train(request):
         from stop_at as st1, stop_at as st2, train as t
         where st1.deptime > '%s' and st1.sid = '%s' and st2.sid = '%s'
             and st1.tid = st2.tid and st1.torder < st2.torder and t.tid = st1.tid
-        order by st1.tid;
+        order by st1.arrtime;
     ''' % (time, begin_station_id, dest_station_id))
 
     trains = cursor.fetchall()  # return tuple instead of Queryset

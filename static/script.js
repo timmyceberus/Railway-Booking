@@ -3,7 +3,6 @@ let stations, counties;
 async function init() {
     stations = await getData();
     counties = getCounty();
-    console.log(counties)
 
 
     const beginBlock = $('.begin-block .county');
@@ -37,6 +36,9 @@ async function init() {
 
 init();
 
+/**
+ * @return {Object} - Data of all stations.
+ * */
 function getData() {
     return new Promise(((resolve, reject) => {
         $.get({
@@ -48,6 +50,9 @@ function getData() {
     }));
 }
 
+/**
+ * @return {Array} - All counties where stations exist.
+ * */
 function getCounty() {
     let counties = [];
     for (let i = 0; i < stations.length; i++) {
@@ -67,6 +72,28 @@ function getCtyStations(stationCty) {
         }
     }
     return ctyStations;
+}
+
+/**
+ * @param {Array} trains - List of train data get from Django.
+ * */
+function createStationTable(trains) {
+    const table = $('.station-table');
+    const tbody = table.find('tbody');
+
+    table.show();
+
+    trains.forEach(train => {
+        $('<tr>').append(
+            $('<td>').text(train['tid']),
+            $('<td>').text(train['begin_time']),
+            $('<td>').text(train['dest_time']),
+            $('<td>').text(train['kind']),
+            $('<td>').text(train['line_no']),
+            $('<td>'),
+            $('<td>')
+        ).appendTo(tbody);
+    })
 }
 
 $('form').on('submit', function (event) {
@@ -92,7 +119,7 @@ $('form').on('submit', function (event) {
         },
         dataType: 'json',
         success: function (data) { // When request success
-            const train = data[0]; // Data
+            createStationTable(data);
         },
         error: function (data) { // An error occurred
         }
@@ -168,5 +195,3 @@ $(document).on('click', '.dropdown-menu', function (event) {
         event.stopPropagation();
     }
 });
-
-

@@ -3,14 +3,36 @@ let stations, counties;
 async function init() {
     stations = await getData();
     counties = getCounty();
+    console.log(counties)
+
 
     const beginBlock = $('.begin-block .county');
     const destBlock = $('.dest-block .county');
 
     counties.forEach(county => {
-        $(`<button class="btn btn-outline-primary btn-sm county-btn" type="button">${county}</button>`).appendTo(beginBlock);
-        $(`<button class="btn btn-outline-danger btn-sm county-btn" type="button">${county}</button>`).appendTo(destBlock);
+        if (county === '基隆市') {
+            $(`<button class="btn btn-outline-primary btn-sm county-btn active" type="button">${county}</button>`).appendTo(beginBlock);
+
+            let stationFilterBegin = getCtyStations('基隆市');
+            const beginBlockStation = $('.begin-block .station');
+            stationFilterBegin.forEach(station => {
+                $(`<button class="btn btn-outline-primary btn-sm station-btn" type="button">${station}</button>`).appendTo(beginBlockStation);
+            });
+
+            $(`<button class="btn btn-outline-danger btn-sm county-btn active"" type="button">${county}</button>`).appendTo(destBlock);
+
+            let stationFilterDest = getCtyStations('基隆市');
+            const destBlockStation = $('.dest-block .station');
+            stationFilterDest.forEach(station => {
+                $(`<button class="btn btn-outline-danger btn-sm station-btn" type="button">${station}</button>`).appendTo(destBlockStation);
+            });
+        } else {
+            $(`<button class="btn btn-outline-primary btn-sm county-btn" type="button">${county}</button>`).appendTo(beginBlock);
+            $(`<button class="btn btn-outline-danger btn-sm county-btn" type="button">${county}</button>`).appendTo(destBlock);
+        }
     });
+
+
 }
 
 init();
@@ -34,6 +56,17 @@ function getCounty() {
         }
     }
     return counties;
+}
+
+function getCtyStations(stationCty) {
+    let ctyStations = [];
+
+    for (let i = 0; i < stations.length; i++) {
+        if (stations[i]['cty'].indexOf(stationCty) !== -1) {
+            ctyStations.push(stations[i]['sname']);
+        }
+    }
+    return ctyStations;
 }
 
 $('form').on('submit', function (event) {
@@ -75,53 +108,55 @@ $(document).on('click', '.county-btn', function () {
 $(document).on('click', '.begin-block .county-btn', function () {
     $(".begin-block .station").empty();
 
-    let station_filter_b = [];
+    let stationFilterBegin = getCtyStations($(this).text());
 
-    for (let i = 0; i < stations.length; i++) {
-        if ($(this).text().indexOf(stations[i]['cty']) !== -1) {
-            station_filter_b.push(stations[i]['sname']);
-        }
-    }
+    const beginBlockStation = $('.begin-block .station');
 
-    const beginBlock_station = $('.begin-block .station');
-
-    station_filter_b.forEach(station => {
-        $(`<button class="btn btn-outline-primary btn-sm station-btn" type="button">${station}</button>`).appendTo(beginBlock_station);
+    stationFilterBegin.forEach(station => {
+        $(`<button class="btn btn-outline-primary btn-sm station-btn" type="button">${station}</button>`).appendTo(beginBlockStation);
     });
 })
 
 $(document).on('click', '.station-btn', function () {
     if ($(this).hasClass('btn-outline-primary')) {
         const beginBlock_text = $('.begin-block .begin-text');
-        beginBlock_text.empty()
-        const contain = $(this).text()
+        beginBlock_text.empty();
 
-        $(`<div >${contain}</div>`).appendTo(beginBlock_text);
+        let contain = $(this).text();
+        for (let i = 0; i < stations.length; i++) {
+            if (stations[i]['sname'] === contain) {
+                contain = stations[i]['sid'] + ' ' + contain;
+                break
+            }
+        }
+
+        $(".begin-text").val(contain);
 
     } else if ($(this).hasClass('btn-outline-danger')) {
         const destBlock_text = $('.dest-block .dest-text');
-        destBlock_text.empty()
-        const contain = $(this).text()
+        destBlock_text.empty();
 
-        $(`<div >${contain}</div>`).appendTo(destBlock_text);
+        let contain = $(this).text();
+        for (let i = 0; i < stations.length; i++) {
+            if (stations[i]['sname'] === contain) {
+                contain = stations[i]['sid'] + ' ' + contain;
+                break
+            }
+        }
+
+        $(".dest-text").val(contain);
     }
 })
 
 $(document).on('click', '.dest-block .county-btn', function () {
     $(".dest-block .station").empty();
 
-    let station_filter_d = [];
+    let stationFilterDest = getCtyStations($(this).text());
 
-    for (let i = 0; i < stations.length; i++) {
-        if ($(this).text().indexOf(stations[i]['cty']) !== -1) {
-            station_filter_d.push(stations[i]['sname']);
-        }
-    }
+    const destBlockStation = $('.dest-block .station');
 
-    const destBlock_station = $('.dest-block .station');
-
-    station_filter_d.forEach(station => {
-        $(`<button class="btn btn-outline-danger btn-sm station-btn" type="button">${station}</button>`).appendTo(destBlock_station);
+    stationFilterDest.forEach(station => {
+        $(`<button class="btn btn-outline-danger btn-sm station-btn" type="button">${station}</button>`).appendTo(destBlockStation);
     });
 
 })

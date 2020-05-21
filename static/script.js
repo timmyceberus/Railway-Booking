@@ -74,6 +74,20 @@ function getCtyStations(stationCty) {
     return ctyStations;
 }
 
+$(document).on('mouseover', '.submit', function () {
+
+    const beginBlock_text = $('.begin-block .begin-text');
+    const destBlock_text = $('.dest-block .dest-text');
+    if (!destBlock_text.val() || !beginBlock_text.val()) {
+        $(this).attr("data-toggle", "tooltip");
+        $(this).attr("title", "輸入不完整");
+    } else {
+        $(this).removeAttr("data-toggle")
+        $(this).removeAttr("title")
+    }
+
+});
+
 /**
  * @param {Array} trains - List of train data get from Django.
  * */
@@ -242,3 +256,5 @@ $(document).on('click', '.dropdown-menu', function (event) {
         event.stopPropagation();
     }
 });
+
+

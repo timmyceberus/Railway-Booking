@@ -30,11 +30,16 @@ def search_train(request):
     time = request.GET.get('time')
 
     # Get id from request message
-    begin_station_id = re.search('^([\\d]{4}) [\\W]+$', begin_station).group(1)
-    dest_station_id = re.search('^([\\d]{4}) [\\W]+$', dest_station).group(1)
+    begin_station_id = re.search('[\\d]{4}', begin_station).group(0)
+    dest_station_id = re.search('[\\d]{4}', dest_station).group(0)
 
     # Find which train satisfied the request
-    trains = StopAt.objects.sql_search_station(begin_station_id, dest_station_id, time)
+    trains = StopAt.objects.raw(
+        "   select * \
+            from stop_at as st1, stop_at as st2 \
+            where st1.deptime > '%s' and st1.sid = '%s' and st2.sid = '%s' \
+                and st1.tid = st2.tid and st1.torder < st2.torder;" % (time, begin_station_id, dest_station_id)
+    )
 
     trains_dict = []
     for train in trains:
@@ -43,18 +48,7 @@ def search_train(request):
     return JsonResponse(trains_dict, safe=False)
 
 
-def sql_search_station(self, begin_station_id, dest_station_id, time):
-    cursor = connection.cursor()
-    cursor.execute("""
-        select *
-        from stop_at as st1, stop_at as st2
-        where st1.deptime > %s and st1.sid = %s and st2.sid = %s 
-            and st1.tid = st2.tid and st1.torder < st2.torder;
-    """, [time, begin_station_id, dest_station_id])
-
-    return [result[0] for result in cursor.fetchall()]
-
-
+# Example
 def get_stations(request):
     # Get information from ajax requests
     begin_station = request.GET.get('begin_station')

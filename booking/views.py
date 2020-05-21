@@ -34,16 +34,21 @@ def search_train(request):
     dest_station_id = re.search('[\\d]{4}', dest_station).group(0)
 
     # Find which train satisfied the request
-    trains = StopAt.objects.raw(
-        "   select * \
-            from stop_at as st1, stop_at as st2 \
-            where st1.deptime > '%s' and st1.sid = '%s' and st2.sid = '%s' \
-                and st1.tid = st2.tid and st1.torder < st2.torder;" % (time, begin_station_id, dest_station_id)
-    )
+    cursor = connection.cursor()
+    cursor.execute('''
+        select st1.tid, st1.arrtime, st2.arrtime \
+        from stop_at as st1, stop_at as st2 \
+        where st1.deptime > '%s' and st1.sid = '%s' and st2.sid = '%s' \
+        and st1.tid = st2.tid and st1.torder < st2.torder \
+        order by st1.tid;
+    ''' % (time, begin_station_id, dest_station_id))
+
+    trains = cursor.fetchall()  # return tuple instead of Queryset
 
     trains_dict = []
     for train in trains:
-        trains_dict.append(model_to_dict(train))
+        trains_dict.append({'tid': train[0], 'begin_time': train[1], 'dest_time': train[2]})
+    print(trains_dict)
 
     return JsonResponse(trains_dict, safe=False)
 

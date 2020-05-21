@@ -36,10 +36,10 @@ def search_train(request):
     # Find which train satisfied the request
     cursor = connection.cursor()
     cursor.execute('''
-        select st1.tid, st1.arrtime, st2.arrtime \
-        from stop_at as st1, stop_at as st2 \
-        where st1.deptime > '%s' and st1.sid = '%s' and st2.sid = '%s' \
-        and st1.tid = st2.tid and st1.torder < st2.torder \
+        select st1.tid, st1.arrtime, st2.arrtime, t.kind, t.line_no
+        from stop_at as st1, stop_at as st2, train as t
+        where st1.deptime > '%s' and st1.sid = '%s' and st2.sid = '%s'
+            and st1.tid = st2.tid and st1.torder < st2.torder and t.tid = st1.tid
         order by st1.tid;
     ''' % (time, begin_station_id, dest_station_id))
 
@@ -47,8 +47,8 @@ def search_train(request):
 
     trains_dict = []
     for train in trains:
-        trains_dict.append({'tid': train[0], 'begin_time': train[1], 'dest_time': train[2]})
-    print(trains_dict)
+        trains_dict.append({'tid': train[0], 'begin_time': train[1], 'dest_time': train[2],
+                            'kind': train[3], 'line_no': train[4]})
 
     return JsonResponse(trains_dict, safe=False)
 

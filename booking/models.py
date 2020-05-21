@@ -74,7 +74,6 @@ class Ticket(models.Model):
     tid = models.CharField(primary_key=True, max_length=15)
     geton = models.ForeignKey(Station, models.DO_NOTHING, db_column='geton', related_name='geton')
     getoff = models.ForeignKey(Station, models.DO_NOTHING, db_column='getoff', related_name='getoff')
-    price = models.IntegerField()
     ttrain = models.ForeignKey(Train, models.DO_NOTHING, db_column='ttrain')
     cno = models.IntegerField()
     sno = models.IntegerField()

@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.show_index),
     path('station/', views.get_stations),
-    path('allstations/', views.get_all_stations)
+    path('allstations/', views.get_all_stations),
+    path('SearchTrain', views.search_train)
 ]

@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from django.db import connection
 
-from .models import Station
+import re
+
+from .models import Station, StopAt
 
 
 # Create your views here.
@@ -21,8 +24,38 @@ def get_all_stations(request):
     return JsonResponse(stations_dict, safe=False)
 
 
-def get_stations(request):
+def search_train(request):
+    begin_station = request.GET.get('begin_station')
+    dest_station = request.GET.get('dest_station')
+    time = request.GET.get('time')
 
+    # Get id from request message
+    begin_station_id = re.search('^([\\d]{4}) [\\W]+$', begin_station).group(1)
+    dest_station_id = re.search('^([\\d]{4}) [\\W]+$', dest_station).group(1)
+
+    # Find which train satisfied the request
+    trains = StopAt.objects.sql_search_station(begin_station_id, dest_station_id, time)
+
+    trains_dict = []
+    for train in trains:
+        trains_dict.append(model_to_dict(train))
+
+    return JsonResponse(trains_dict, safe=False)
+
+
+def sql_search_station(self, begin_station_id, dest_station_id, time):
+    cursor = connection.cursor()
+    cursor.execute("""
+        select *
+        from stop_at as st1, stop_at as st2
+        where st1.deptime > %s and st1.sid = %s and st2.sid = %s 
+            and st1.tid = st2.tid and st1.torder < st2.torder;
+    """, [time, begin_station_id, dest_station_id])
+
+    return [result[0] for result in cursor.fetchall()]
+
+
+def get_stations(request):
     # Get information from ajax requests
     begin_station = request.GET.get('begin_station')
     dest_station = request.GET.get('dest_station')

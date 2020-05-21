@@ -72,27 +72,29 @@ function getCtyStations(stationCty) {
 $('form').on('submit', function (event) {
     event.preventDefault();
 
-    let beginStationName, destStationName;
+    let beginStationName, destStationName, time;
     $(this).serializeArray().forEach(element => { // Get values from 'form'
         if (element['name'] === 'begin_station')
             beginStationName = element['value'];
         if (element['name'] === 'dest_station')
             destStationName = element['value'];
+        if (element['name'] === 'time')
+            time = element['value'];
     });
 
 
     $.ajax({ // Asyn request
-        url: `station`,
+        url: `SearchTrain`,
         data: {
             'begin_station': beginStationName,
-            'dest_station': destStationName
+            'dest_station': destStationName,
+            'time': time
         },
         dataType: 'json',
         success: function (data) { // When request success
-            const station = data[0]; // Data
+            const train = data[0]; // Data
         },
         error: function (data) { // An error occurred
-
         }
     });
 });
@@ -102,7 +104,7 @@ $(document).on('click', '.county-btn', function () {
     //let bottom in it's siblings only bright one
     $(this).siblings().removeClass('active');
     $(this).addClass('active');
-})
+});
 
 
 $(document).on('click', '.begin-block .county-btn', function () {
@@ -115,7 +117,7 @@ $(document).on('click', '.begin-block .county-btn', function () {
     stationFilterBegin.forEach(station => {
         $(`<button class="btn btn-outline-primary btn-sm station-btn" type="button">${station}</button>`).appendTo(beginBlockStation);
     });
-})
+});
 
 $(document).on('click', '.station-btn', function () {
     if ($(this).hasClass('btn-outline-primary')) {
@@ -146,7 +148,7 @@ $(document).on('click', '.station-btn', function () {
 
         $(".dest-text").val(contain);
     }
-})
+});
 
 $(document).on('click', '.dest-block .county-btn', function () {
     $(".dest-block .station").empty();
@@ -159,7 +161,7 @@ $(document).on('click', '.dest-block .county-btn', function () {
         $(`<button class="btn btn-outline-danger btn-sm station-btn" type="button">${station}</button>`).appendTo(destBlockStation);
     });
 
-})
+});
 
 $(document).on('click', '.dropdown-menu', function (event) {
     // When user not clicked on the station buttons, don't hide the dropdown menu

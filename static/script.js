@@ -99,7 +99,6 @@ $('form').on('submit', function (event) {
     });
 });
 
-
 $(document).on('click', '.county-btn', function () {
     //let bottom in it's siblings only bright one
     $(this).siblings().removeClass('active');
@@ -169,3 +168,5 @@ $(document).on('click', '.dropdown-menu', function (event) {
         event.stopPropagation();
     }
 });
+
+

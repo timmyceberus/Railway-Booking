@@ -14,6 +14,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.3.2/moment-duration-format.min.js"></script>
 
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static "/style.css" %}">
@@ -38,7 +40,7 @@
                         <div class="station"></div>
                     </div>
                 </div>
-                <input type="text" class="form-control begin-text" name="begin_station" style="pointer-events:none">
+                <input type="text" value="1020 板橋" class="form-control begin-text" name="begin_station" style="pointer-events:none">
             </div>
         </div>
         <div class="dest-block">
@@ -54,7 +56,7 @@
                         <div class="station"></div>
                     </div>
                 </div>
-                <input type="text" class="form-control dest-text" name="dest_station" style="pointer-events:none">
+                <input type="text" value="1000 臺北" class="form-control dest-text" name="dest_station" style="pointer-events:none">
             </div>
         </div>
         <input type="time" name="time" value="06:00">

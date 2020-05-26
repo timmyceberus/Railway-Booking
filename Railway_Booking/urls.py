@@ -23,5 +23,6 @@ urlpatterns = [
     path('', views.show_index),
     path('station/', views.get_stations),
     path('allstations/', views.get_all_stations),
-    path('SearchTrain', views.search_train)
+    path('TrainSchedule/', views.get_train_schedule),
+    path('SearchTrain/', views.search_train)
 ]

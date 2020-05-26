@@ -38,7 +38,7 @@
                         <div class="station"></div>
                     </div>
                 </div>
-                <input type="text" class="form-control begin-text" name="begin_station" style="pointer-events:none">
+                <input type="text" class="form-control begin-text" name="begin_station" style="pointer-events:none" value="1020 板橋">
             </div>
         </div>
         <div class="dest-block">
@@ -54,12 +54,12 @@
                         <div class="station"></div>
                     </div>
                 </div>
-                <input type="text" class="form-control dest-text" name="dest_station" style="pointer-events:none">
+                <input type="text" class="form-control dest-text" name="dest_station" style="pointer-events:none" value="1000 臺北">
             </div>
         </div>
         <input type="time" name="time" value="06:00">
 
-        <button type="submit">Submit</button>
+        <button type="submit" class="submit">Submit</button>
     </form>
     <div style="padding-left: 5px; padding-right: 5px; padding-bottom: 1px; backdrop-filter: blur(10px);">
         <table class="table station-table" style="display: none">
@@ -80,8 +80,26 @@
     </div>
 </div>
 
-<div>
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title"></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body">
+        <table class="route-table table"></table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 <script src="{% static "/script.js" %}"></script>
 </body>

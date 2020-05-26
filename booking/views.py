@@ -13,6 +13,24 @@ def show_index(request):
     return render(request, 'index.html')
 
 
+def get_train_schedule(request):
+    tid = request.GET.get('train_id')
+    cursor = connection.cursor()
+    cursor.execute('''
+            select s.sname,st.arrtime,st.deptime
+            from stop_at as st,train as t,station as s
+            where st.sid=s.sid and st.tid=t.tid and t.tid = '%s'
+            order by st.torder;
+        ''' % tid)
+    train_schedule = cursor.fetchall()
+
+    trains_schedule_dict = []
+    for train_s in train_schedule:
+        trains_schedule_dict.append({'sname': train_s[0], 'arrtime': train_s[1], 'deptime': train_s[2]})
+
+    return JsonResponse(trains_schedule_dict, safe=False)
+
+
 def get_all_stations(request):
     stations = Station.objects.all()
 

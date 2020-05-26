@@ -1,12 +1,13 @@
 let stations, counties;
 
+
 async function init() {
+
     stations = await getData();
     counties = getCounty();
-
-
     const beginBlock = $('.begin-block .county');
     const destBlock = $('.dest-block .county');
+
 
     counties.forEach(county => {
         if (county === '基隆市') {
@@ -63,6 +64,10 @@ function getCounty() {
     return counties;
 }
 
+/**
+ * @param  {Array} stationCty -
+ * @return {Array} -Get all station name which same city.
+ * */
 function getCtyStations(stationCty) {
     let ctyStations = [];
 
@@ -92,6 +97,7 @@ $(document).on('mouseover', '.submit', function () {
  * @param {Array} trains - List of train data get from Django.
  * */
 async function createStationTable(trains) {
+
     const table = $('.station-table');
     const tbody = table.find('tbody');
 
@@ -132,7 +138,8 @@ async function createStationTable(trains) {
         }
 
         $('<tr>').append(
-            $('<td>').text(`${kind} ${train['tid']}`),
+            $('<td>').append($('<a>').text(`${kind} ${train['tid']}`).addClass('route-info')
+                .attr("data-tid",`${train['tid']}`).attr('data-toggle','modal').attr('data-target',"#myModal")),
             $('<td>').text(train['begin_time']),
             $('<td>').text(train['dest_time']),
             $('<td>'),
@@ -145,6 +152,30 @@ async function createStationTable(trains) {
     table.fadeIn(300);
 }
 
+async function createRouteModal(trainRoute) {
+    console.log(trainRoute)
+    const modelTable = $('.modal-body .route-table');
+    modelTable.empty()
+    const banner = $('.modal-title');
+    banner.empty()
+
+
+    trainRoute.forEach(trainR => {
+        $('.route-table').append(
+            $('<tr>').append(
+                $('<td>').text(`${trainR['sname']}`),
+                $('<td>').text(`${trainR['arrtime']}`),
+                $('<td>').text(`${trainR['deptime']}`)
+            )
+        )
+    });
+
+
+}
+
+// <td data-apple="105">105</td>
+// $(this).data('apple')
+
 /**
  * @param {Number} ms - Set sleep time.
  * */
@@ -155,7 +186,6 @@ function sleep(ms=1000){
         }, ms)
     }))
 }
-
 
 $('form').on('submit', function (event) {
     event.preventDefault();
@@ -185,7 +215,25 @@ $('form').on('submit', function (event) {
         error: function (data) { // An error occurred
         }
     });
+
 });
+
+$(document).on('click', '.route-info', function () {
+
+    $.ajax({ // Asyn request
+        url: `TrainSchedule`,
+        data: {
+            'train_id': $(this).data('tid')
+        },
+        dataType: 'json',
+        success: function (data) { // When request success
+            createRouteModal(data);
+        },
+        error: function (data) { // An error occurred
+        }
+    });
+});
+
 
 $(document).on('click', '.county-btn', function () {
     //let bottom in it's siblings only bright one
@@ -208,8 +256,8 @@ $(document).on('click', '.begin-block .county-btn', function () {
 
 $(document).on('click', '.station-btn', function () {
     if ($(this).hasClass('btn-outline-primary')) {
-        const beginBlock_text = $('.begin-block .begin-text');
-        beginBlock_text.empty();
+        const beginBlockText = $('.begin-block .begin-text');
+        beginBlockText.empty();
 
         let contain = $(this).text();
         for (let i = 0; i < stations.length; i++) {
@@ -222,8 +270,8 @@ $(document).on('click', '.station-btn', function () {
         $(".begin-text").val(contain);
 
     } else if ($(this).hasClass('btn-outline-danger')) {
-        const destBlock_text = $('.dest-block .dest-text');
-        destBlock_text.empty();
+        const destBlockText = $('.dest-block .dest-text');
+        destBlockText.empty();
 
         let contain = $(this).text();
         for (let i = 0; i < stations.length; i++) {

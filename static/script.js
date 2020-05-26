@@ -1,13 +1,12 @@
 let stations, counties;
 
-
 async function init() {
-
     stations = await getData();
     counties = getCounty();
+
+
     const beginBlock = $('.begin-block .county');
     const destBlock = $('.dest-block .county');
-
 
     counties.forEach(county => {
         if (county === '基隆市') {
@@ -38,7 +37,7 @@ async function init() {
 init();
 
 /**
- * @return {Object} - Data of all stations.
+ * @return {Promise} - Data of all stations.
  * */
 function getData() {
     return new Promise(((resolve, reject) => {
@@ -52,7 +51,7 @@ function getData() {
 }
 
 /**
- * @return {Array} - All counties where stations exist.
+ * @return {Object[]} - All counties where stations exist.
  * */
 function getCounty() {
     let counties = [];
@@ -87,62 +86,56 @@ $(document).on('mouseover', '.submit', function () {
         $(this).attr("data-toggle", "tooltip");
         $(this).attr("title", "輸入不完整");
     } else {
-        $(this).removeAttr("data-toggle")
-        $(this).removeAttr("title")
+        $(this).removeAttr("data-toggle");
+        $(this).removeAttr("title");
     }
-
 });
 
 /**
- * @param {Array} trains - List of train data get from Django.
+ * @param {String} beginTime - String type of begin time in 'hh:mm' format
+ * @param {String} destTime - String type of destination time in 'hh:mm' format
+ * @returns {String} - String type of difference between begin time and destination time in 'hh:mm' format
+ */
+function timeDiff(beginTime, destTime) {
+    const beginMoment = moment(beginTime, 'HH:mm');
+    const destMoment = moment(destTime, 'HH:mm');
+    let diff = destMoment.diff(beginMoment, 'minutes');
+
+    // Cross Day
+    if (diff < 0)
+        diff += 1440;
+
+    return moment.duration(diff, 'minutes').format('HH:mm', {trim: false}); // Time with leading 0 when trim set to false
+}
+
+/**
+ * @param {Object[]} trains - List of train data get from Django.
  * */
 async function createStationTable(trains) {
-
     const table = $('.station-table');
     const tbody = table.find('tbody');
 
     $('form').css('top', '0vh'); // A slide effect of form from middle to top
 
-    if(!table.is(':visible')) // When table is not visible, wait for the form move to the top for 700ms.
+    if (!table.is(':visible')) // When table is not visible, wait for the form move to the top for 700ms.
         await sleep(700);
 
     tbody.empty();
+    const trainNames = ['自強', '莒光', '復興'];
+    const lineNames = ['-', '山線', '海線', '成追'];
     trains.forEach(train => {
-        let kind;
-        switch (train['kind']) {
-            case 0:
-                kind = '自強';
-                break;
-            case 1:
-                kind = '莒光';
-                break;
-            case 2:
-                kind = '復興';
-                break;
-        }
-
-        let line;
-        switch (train['line_no']) {
-            case 0:
-                line = '-';
-                break;
-            case 1:
-                line = '山線';
-                break;
-            case 2:
-                line = '海線';
-                break;
-            case 3:
-                line = '成追';
-                break;
-        }
+        const trainId = train['tid'];
+        const beginTime = moment(train['begin_time'], 'HH:mm:ss').format('HH:mm'); // Turn HH:mm:ss to HH:mm
+        const destTime = moment(train['dest_time'], 'HH:mm:ss').format('HH:mm'); // Turn HH:mm:ss to HH:mm
+        const duration = timeDiff(beginTime, destTime);
+        const kind = trainNames[train['kind']];
+        const line = lineNames[train['line_no']];
 
         $('<tr>').append(
-            $('<td>').append($('<a>').text(`${kind} ${train['tid']}`).addClass('route-info')
-                .attr("data-tid",`${train['tid']}`).attr('data-toggle','modal').attr('data-target',"#myModal")),
-            $('<td>').text(train['begin_time']),
-            $('<td>').text(train['dest_time']),
-            $('<td>'),
+            $('<td>').append($(`<a class="route-info" data-tid="${train['tid']}" data-toggle="modal" data-target="#myModal">`).text(`${kind} ${trainId}`)),
+            $('<td>').text(beginTime),
+            $('<td>').text(destTime),
+            $('<td>').text(duration),
             $('<td>').text(line),
             $('<td>'),
             $('<td>')
@@ -179,13 +172,14 @@ async function createRouteModal(trainRoute) {
 /**
  * @param {Number} ms - Set sleep time.
  * */
-function sleep(ms=1000){
+function sleep(ms = 1000) {
     return new Promise(((resolve, reject) => {
-        setTimeout(()=>{
+        setTimeout(() => {
             resolve()
         }, ms)
     }))
 }
+
 
 $('form').on('submit', function (event) {
     event.preventDefault();
@@ -233,7 +227,6 @@ $(document).on('click', '.route-info', function () {
         }
     });
 });
-
 
 $(document).on('click', '.county-btn', function () {
     //let bottom in it's siblings only bright one
@@ -304,5 +297,3 @@ $(document).on('click', '.dropdown-menu', function (event) {
         event.stopPropagation();
     }
 });
-
-

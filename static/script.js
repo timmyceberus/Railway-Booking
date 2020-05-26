@@ -132,7 +132,8 @@ async function createStationTable(trains) {
         const line = lineNames[train['line_no']];
 
         $('<tr>').append(
-            $('<td>').append($(`<a class="route-info" data-tid="${train['tid']}" data-toggle="modal" data-target="#myModal">`).text(`${kind} ${trainId}`)),
+            $('<td>').append($(`<a class="route-info" data-tid="${train['tid']}" data-tkind="${kind}" data-toggle="modal"
+                data-target="#myModal"> `).text(`${kind} ${trainId}`)),
             $('<td>').text(beginTime),
             $('<td>').text(destTime),
             $('<td>').text(duration),
@@ -145,25 +146,45 @@ async function createStationTable(trains) {
     table.fadeIn(300);
 }
 
-async function createRouteModal(trainRoute) {
-    console.log(trainRoute)
+async function createRouteModal(trainRoute, tid, tname) {
     const modelTable = $('.modal-body .route-table');
     modelTable.empty()
     const banner = $('.modal-title');
     banner.empty()
-
+    banner.text(`${tname}  ${tid}`)
+    $('.route-table').append(
+        $('<tr>').append(
+            $('<th>').text(`車站`),
+            $('<th>').text(`到站時間`),
+            $('<th>').text(`離站時間`)
+        )
+    )
 
     trainRoute.forEach(trainR => {
-        $('.route-table').append(
-            $('<tr>').append(
-                $('<td>').text(`${trainR['sname']}`),
-                $('<td>').text(`${trainR['arrtime']}`),
-                $('<td>').text(`${trainR['deptime']}`)
+        if ($('.begin-text').val().search(trainR['sname'])>=0 || $('.dest-text').val().search(trainR['sname'])>=0 ) {
+            $('.route-table').append(
+                $('<tr>').append(
+                    $('<td>').append(
+                        $('<mark>').text(`${trainR['sname']}`)
+                    ),
+                    $('<td>').append(
+                        $('<mark>').text(`${trainR['arrtime']}`)
+                    ),
+                    $('<td>').append(
+                        $('<mark>').text(`${trainR['deptime']}`)
+                    )
+                )
             )
-        )
+        } else {
+            $('.route-table').append(
+                $('<tr>').append(
+                    $('<td>').text(`${trainR['sname']}`),
+                    $('<td>').text(`${trainR['arrtime']}`),
+                    $('<td>').text(`${trainR['deptime']}`)
+                )
+            )
+        }
     });
-
-
 }
 
 // <td data-apple="105">105</td>
@@ -213,7 +234,8 @@ $('form').on('submit', function (event) {
 });
 
 $(document).on('click', '.route-info', function () {
-
+    const id = $(this).data('tid');
+    const kind = $(this).data('tkind');
     $.ajax({ // Asyn request
         url: `TrainSchedule`,
         data: {
@@ -221,7 +243,7 @@ $(document).on('click', '.route-info', function () {
         },
         dataType: 'json',
         success: function (data) { // When request success
-            createRouteModal(data);
+            createRouteModal(data, id, kind);
         },
         error: function (data) { // An error occurred
         }

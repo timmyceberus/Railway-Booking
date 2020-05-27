@@ -78,19 +78,6 @@ function getCtyStations(stationCty) {
     return ctyStations;
 }
 
-$(document).on('mouseover', '.submit', function () {
-
-    const beginBlock_text = $('.begin-block .begin-text');
-    const destBlock_text = $('.dest-block .dest-text');
-    if (!destBlock_text.val() || !beginBlock_text.val()) {
-        $(this).attr("data-toggle", "tooltip");
-        $(this).attr("title", "輸入不完整");
-    } else {
-        $(this).removeAttr("data-toggle");
-        $(this).removeAttr("title");
-    }
-});
-
 /**
  * @param {String} beginTime - String type of begin time in 'hh:mm' format
  * @param {String} destTime - String type of destination time in 'hh:mm' format
@@ -106,6 +93,15 @@ function timeDiff(beginTime, destTime) {
         diff += 1440;
 
     return moment.duration(diff, 'minutes').format('HH:mm', {trim: false}); // Time with leading 0 when trim set to false
+}
+
+/**
+ * @param {String} duration - Duration of taking train
+ * @returns {Number} - Price of taking train
+ */
+function priceCalculate(duration) {
+    const minutes = moment.duration(duration).asMinutes();
+    return minutes*2;
 }
 
 /**
@@ -128,17 +124,18 @@ async function createStationTable(trains) {
         const beginTime = moment(train['begin_time'], 'HH:mm:ss').format('HH:mm'); // Turn HH:mm:ss to HH:mm
         const destTime = moment(train['dest_time'], 'HH:mm:ss').format('HH:mm'); // Turn HH:mm:ss to HH:mm
         const duration = timeDiff(beginTime, destTime);
+        const price = priceCalculate(duration);
         const kind = trainNames[train['kind']];
         const line = lineNames[train['line_no']];
 
         $('<tr>').append(
             $('<td>').append($(`<a class="route-info" data-tid="${train['tid']}" data-tkind="${kind}" data-toggle="modal"
-                data-target="#myModal"> `).text(`${kind} ${trainId}`)),
+                data-target="#myModal">`).text(`${kind} ${trainId}`)),
             $('<td>').text(beginTime),
             $('<td>').text(destTime),
             $('<td>').text(duration),
             $('<td>').text(line),
-            $('<td>'),
+            $('<td>').text(`$${price}`),
             $('<td>')
         ).appendTo(tbody);
     });
@@ -146,49 +143,50 @@ async function createStationTable(trains) {
     table.fadeIn(300);
 }
 
-async function createRouteModal(trainRoute, tid, tname) {
+/**
+ * @param {Object[]}trainRoute
+ * @param {String}tid
+ * @param {String}tname
+ */
+function createRouteModal(trainRoute, tid, tname) {
     const modelTable = $('.modal-body .route-table');
-    modelTable.empty()
     const banner = $('.modal-title');
+    modelTable.empty()
     banner.empty()
     banner.text(`${tname}  ${tid}`)
     $('.route-table').append(
         $('<tr>').append(
-            $('<th>').text(`車站`),
-            $('<th>').text(`到站時間`),
-            $('<th>').text(`離站時間`)
+            $('<th>').text('車站'),
+            $('<th>').text('到站時間'),
+            $('<th>').text('離站時間')
         )
     )
 
     trainRoute.forEach(trainR => {
-        if ($('.begin-text').val().search(trainR['sname'])>=0 || $('.dest-text').val().search(trainR['sname'])>=0 ) {
-            $('.route-table').append(
-                $('<tr>').append(
-                    $('<td>').append(
-                        $('<mark>').text(`${trainR['sname']}`)
-                    ),
-                    $('<td>').append(
-                        $('<mark>').text(`${trainR['arrtime']}`)
-                    ),
-                    $('<td>').append(
-                        $('<mark>').text(`${trainR['deptime']}`)
-                    )
-                )
-            )
+        if ($('.begin-text').val().search(trainR['sname']) >= 0) {
+
+            $('<tr class="bg-primary" style="color: white; opacity: 0.8">').append(
+                $('<td>').text(`${trainR['sname']}`),
+                $('<td>').text(`${trainR['arrtime']}`),
+                $('<td>').text(`${trainR['deptime']}`)
+            ).appendTo(modelTable)
+
+        } else if ($('.dest-text').val().search(trainR['sname']) >= 0) {
+            $('<tr class="bg-danger" style="color: white; opacity: 0.8">').append(
+                $('<td>').text(`${trainR['sname']}`),
+                $('<td>').text(`${trainR['arrtime']}`),
+                $('<td>').text(`${trainR['deptime']}`)
+            ).appendTo(modelTable)
         } else {
-            $('.route-table').append(
-                $('<tr>').append(
-                    $('<td>').text(`${trainR['sname']}`),
-                    $('<td>').text(`${trainR['arrtime']}`),
-                    $('<td>').text(`${trainR['deptime']}`)
-                )
-            )
+
+            $('<tr>').append(
+                $('<td>').text(`${trainR['sname']}`),
+                $('<td>').text(`${trainR['arrtime']}`),
+                $('<td>').text(`${trainR['deptime']}`)
+            ).appendTo(modelTable)
         }
     });
 }
-
-// <td data-apple="105">105</td>
-// $(this).data('apple')
 
 /**
  * @param {Number} ms - Set sleep time.

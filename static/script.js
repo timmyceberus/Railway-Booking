@@ -121,7 +121,7 @@ async function createStationTable(trains) {
     const table = $('.station-table');
     const tbody = table.find('tbody');
 
-    $('form').css('top', '0vh'); // A slide effect of form from middle to top
+    $('.search-form').css('top', '0vh'); // A slide effect of form from middle to top
 
     if (!table.is(':visible')) // When table is not visible, wait for the form move to the top for 700ms.
         await sleep(700);
@@ -209,7 +209,7 @@ function sleep(ms = 1000) {
 }
 
 
-$('form').on('submit', function (event) {
+$('.search-form').on('submit', function (event) {
     event.preventDefault();
 
     let beginStationName, destStationName, time;

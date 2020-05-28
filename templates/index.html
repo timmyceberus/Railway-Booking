@@ -1,4 +1,5 @@
 {% extends './template/base.html' %}
+{% load static %}
 {% block pagetitle %}查詢 - 台鐵訂票系統網{% endblock %}
 {% block bgname %}Taroko.jpg{% endblock %}
 {% block content %}
@@ -41,3 +42,4 @@
         </div>
     </div>
 {% endblock %}
+{% block script %}{% static "/script.js" %}{% endblock %}

@@ -1,10 +1,10 @@
-<form method="get" style="top: {{ on_top }}">
+<form method="get" class="search-form" style="top: {{ on_top }}">
     {% csrf_token %}
     <div class="begin-block">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <button class="btn btn-primary dropdown-toggle" type="button"
-                        data-toggle="dropdown"
+                <button class="btn btn-primary {% if not only_station %}dropdown-toggle{% endif %}" type="button"
+                        {% if not only_station %}data-toggle="dropdown"{% endif %}
                 >出發站
                 </button>
                 <div class="dropdown-menu">
@@ -20,8 +20,8 @@
     <div class="dest-block">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <button class="btn btn-danger dropdown-toggle" type="button"
-                        data-toggle="dropdown"
+                <button class="btn btn-danger {% if not only_station %}dropdown-toggle{% endif %}" type="button"
+                        {% if not only_station %}data-toggle="dropdown"{% endif %}
                 >抵達站
                 </button>
                 <div class="dropdown-menu">

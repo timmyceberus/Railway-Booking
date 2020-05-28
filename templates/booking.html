@@ -1,13 +1,71 @@
 {% extends './template/base.html' %}
+{% load static %}
 {% block pagetitle %}訂票 - 台鐵訂票系統網{% endblock %}
 {% block bgname %}Taroko.jpg{% endblock %}
 {% block content %}
     {% include './component/form.html' with bgst=full_begin_station dsst=full_dest_station only_station=True on_top='0' only %}
-    <form action="post">
-        <span>{{ train_name }} {{ train_id }}</span>
-        <input type="date">
-
-
+    <form style="color:white;">
+        <div class="form-row">
+            <div class="col-md-2"></div>
+            <div class="form-group col-md-3">
+                <input id="ssn" type="radio" name="ssn-type" value="ssn" checked>
+                <label for="ssn" style="margin-right: 10px">身份證字號</label>
+                <input id="passport" type="radio" name="ssn-type" value="passport">
+                <label for="passport">護照號碼</label>
+                <input type="text" class="form-control" name="ssn-value" required>
+            </div>
+            <div class="form-group col-md-3">
+                <div class="mb-2" style="margin-left: 20px">票種</div>
+                <div class="btn-group btn-group-toggle" style="left: 20px" data-toggle="buttons">
+                    <label class="btn btn-info active">
+                        <input type="radio" name="ticket-kind" autocomplete="off" checked>成人
+                    </label>
+                    <label class="btn btn-info">
+                        <input type="radio" name="ticket-kind" autocomplete="off"> 孩童
+                    </label>
+                    <label class="btn btn-info">
+                        <input type="radio" name="ticket-kind" autocomplete="off"> 敬老
+                    </label>
+                    <label class="btn btn-info">
+                        <input type="radio" name="ticket-kind" autocomplete="off"> 愛心
+                    </label>
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <div class="mb-2">行程種類</div>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-info active">
+                        <input type="radio" name="schedule-kind" autocomplete="off" checked>單程
+                    </label>
+                    <label class="btn btn-info">
+                        <input type="radio" name="schedule-kind" autocomplete="off"> 來回
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="date">日期</label>
+                <input type="date" class="form-control" name="date" id="date" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="train-id">車次</label>
+                <input type="text" class="form-control" id="train-id" name="train-id" value="{{ train_id }}" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="ticket-count">票數</label>
+                <input type="number" class="form-control" id="ticket-count" name="ticket-count" min="1" max="6" value="1">
+            </div>
+            <div class="form-group col-md-4">
+                <label>座位</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="car-number" placeholder="車廂號碼" name="car-number" min="1" max="12" required>
+                    <input type="number" class="form-control" id="seat-number" placeholder="座位編號" name="seat-number" min="1" max="52" required>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">訂票</button>
     </form>
-
 {% endblock %}
+
+{% block script %}{% static "/booking.js" %}{% endblock %}

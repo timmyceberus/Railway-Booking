@@ -71,9 +71,13 @@ def search_train(request):
     return JsonResponse(trains_dict, safe=False)
 
 
-def booking(request):
-
-    return render(request, 'booking.html', context={})
+def booking(request, tid, bsid, dsid):
+    context = {
+        'train_id': tid,
+        'begin_station_id': bsid,
+        'dest_station_id': dsid
+    }
+    return render(request, 'booking.html', context=context)
 
 
 # Example

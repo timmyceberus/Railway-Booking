@@ -146,7 +146,7 @@ async function createStationTable(trains) {
             $('<td>').text(duration),
             $('<td>').text(line),
             $('<td>').text(`$${price}`),
-            $('<td>').append($('<a href="booking">').html(ticketIcon()))
+            $('<td>').append($(`<a data-tid="${train['tid']}" href="">`).addClass('book-ticket').html(ticketIcon()))
         ).appendTo(tbody);
     });
 
@@ -239,6 +239,14 @@ $('form').on('submit', function (event) {
     });
 
 });
+
+$(document).on('click','.book-ticket', function (event) {
+    event.preventDefault();
+    bsId = $('.begin-text').val().split(' ');
+    dsId = $('.dest-text').val().split(' ');
+    console.log(`http://127.0.0.1:8000/booking/${$(this).data('tid')}/${bsId[0]}/${dsId[0]}`)
+    window.location.assign(`http://127.0.0.1:8000/booking/${$(this).data('tid')}/${bsId[0]}/${dsId[0]}`);
+})
 
 $(document).on('click', '.route-info', function () {
     const id = $(this).data('tid');

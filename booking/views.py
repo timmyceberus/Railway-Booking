@@ -71,6 +71,11 @@ def search_train(request):
     return JsonResponse(trains_dict, safe=False)
 
 
+def booking(request):
+
+    return render(request, 'booking.html', context={})
+
+
 # Example
 def get_stations(request):
     # Get information from ajax requests

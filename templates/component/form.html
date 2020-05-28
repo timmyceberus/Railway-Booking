@@ -1,4 +1,4 @@
-<form method="get">
+<form method="get" style="top: {{ on_top }}">
     {% csrf_token %}
     <div class="begin-block">
         <div class="input-group mb-3">
@@ -14,7 +14,7 @@
                 </div>
             </div>
             <input type="text" class="form-control begin-text" name="begin_station" style="pointer-events:none"
-                   value="{{bsid}}">
+                   value="{{ bgst }}">
         </div>
     </div>
     <div class="dest-block">
@@ -31,10 +31,12 @@
                 </div>
             </div>
             <input type="text" class="form-control dest-text" name="dest_station" style="pointer-events:none"
-                   value="1000 臺北">
+                   value="{{ dsst }}">
         </div>
     </div>
-    <input class="mb-3" type="time" name="time" value="06:00">
 
-    <button type="submit" class="submit btn btn-info mb-3 ml-2">Submit</button>
+    {% if not only_station %}
+        <input class="mb-3" type="time" name="time" value="06:00">
+        <button type="submit" class="submit btn btn-info mb-3 ml-2">Submit</button>
+    {% endif %}
 </form>

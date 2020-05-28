@@ -28,7 +28,6 @@ form {
     display: flex;
     justify-content: center;
     position: relative;
-    top: 40vh;
     transition: all 0.7s cubic-bezier(0, 0, 0.2, 1.11);
 }
 

@@ -5,7 +5,7 @@ from django.db import connection
 
 import re
 
-from .models import Station, StopAt
+from .models import Station, Train
 
 
 # Create your views here.
@@ -72,10 +72,26 @@ def search_train(request):
 
 
 def booking(request, tid, bsid, dsid):
+    train_names = ['自強', '莒光', '復興']
+
+    try:
+        begin_station = Station.objects.get(sid=bsid)
+        dest_station = Station.objects.get(sid=dsid)
+        train = Train.objects.get(tid=tid)
+    except:
+        return render(request, '404 not found.html')
+
+    begin_name = begin_station.sname
+    dest_name = dest_station.sname
+    train_name = train_names[train.kind]
+
     context = {
         'train_id': tid,
+        'train_name': train_name,
         'begin_station_id': bsid,
-        'dest_station_id': dsid
+        'full_begin_station': bsid + ' ' + begin_name,
+        'dest_station_id': dsid,
+        'full_dest_station': dsid + ' ' + dest_name
     }
     return render(request, 'booking.html', context=context)
 

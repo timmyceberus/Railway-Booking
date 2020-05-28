@@ -1,7 +1,13 @@
-{% extends './base.html' %}
-{% block pagetitle %}台鐵訂票系統網 - 訂票{% endblock %}
+{% extends './template/base.html' %}
+{% block pagetitle %}訂票 - 台鐵訂票系統網{% endblock %}
 {% block bgname %}Taroko.jpg{% endblock %}
 {% block content %}
-    {{ train_id }},{{ begin_station_id }}, {{ dest_station_id }}
-{#    {% include 'form.html' with {"bsid":{{ begin_station_id }}, "dsid": {{ dest_station_id }} } %}#}
+    {% include './component/form.html' with bgst=full_begin_station dsst=full_dest_station only_station=True on_top='0' only %}
+    <form action="post">
+        <span>{{ train_name }} {{ train_id }}</span>
+        <input type="date">
+
+
+    </form>
+
 {% endblock %}

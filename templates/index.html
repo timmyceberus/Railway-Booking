@@ -1,8 +1,8 @@
-{% extends './base.html' %}
-{% block pagetitle %}台鐵訂票系統網{% endblock %}
+{% extends './template/base.html' %}
+{% block pagetitle %}查詢 - 台鐵訂票系統網{% endblock %}
 {% block bgname %}Taroko.jpg{% endblock %}
 {% block content %}
-    {% include 'form.html' %}
+    {% include 'component/form.html' with bgst='1020 板橋' dsst='1000 臺北' only_station=False on_top='40vh' %}
     <div style="padding-left: 5px; padding-right: 5px; padding-bottom: 1px; backdrop-filter: blur(10px);">
         <table class="table station-table" style="display: none">
             <thead>

@@ -2,46 +2,7 @@
 {% block pagetitle %}台鐵訂票系統網{% endblock %}
 {% block bgname %}Taroko.jpg{% endblock %}
 {% block content %}
-    <form method="get">
-        {% csrf_token %}
-        <div class="begin-block">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <button class="btn btn-primary dropdown-toggle" type="button"
-                            data-toggle="dropdown"
-                    >出發站
-                    </button>
-                    <div class="dropdown-menu">
-                        <div class="county"></div>
-                        <div role="separator" class="dropdown-divider"></div>
-                        <div class="station"></div>
-                    </div>
-                </div>
-                <input type="text" class="form-control begin-text" name="begin_station" style="pointer-events:none"
-                       value="1020 板橋">
-            </div>
-        </div>
-        <div class="dest-block">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <button class="btn btn-danger dropdown-toggle" type="button"
-                            data-toggle="dropdown"
-                    >抵達站
-                    </button>
-                    <div class="dropdown-menu">
-                        <div class="county"></div>
-                        <div role="separator" class="dropdown-divider"></div>
-                        <div class="station"></div>
-                    </div>
-                </div>
-                <input type="text" class="form-control dest-text" name="dest_station" style="pointer-events:none"
-                       value="1000 臺北">
-            </div>
-        </div>
-        <input class="mb-3" type="time" name="time" value="06:00">
-
-        <button type="submit" class="submit btn btn-info mb-3 ml-2">Submit</button>
-    </form>
+    {% include 'form.html' %}
     <div style="padding-left: 5px; padding-right: 5px; padding-bottom: 1px; backdrop-filter: blur(10px);">
         <table class="table station-table" style="display: none">
             <thead>

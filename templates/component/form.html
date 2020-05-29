@@ -3,8 +3,8 @@
     <div class="begin-block">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <button class="btn btn-primary {% if not only_station %}dropdown-toggle{% endif %}" type="button"
-                        {% if not only_station %}data-toggle="dropdown"{% endif %}
+                <button class="btn btn-primary {% if show_in_index %}dropdown-toggle{% endif %}" type="button"
+                        {% if show_in_index %}data-toggle="dropdown"{% endif %}
                 >出發站
                 </button>
                 <div class="dropdown-menu">
@@ -17,11 +17,30 @@
                    value="{{ bgst }}">
         </div>
     </div>
+    {% if show_in_index %}
+        <a class="exchange-station">
+            <svg class="bi bi-arrow-left-right sign exchange-sign" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                      d="M10.146 7.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 11l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+                <path fill-rule="evenodd"
+                      d="M2 11a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 11zm3.854-9.354a.5.5 0 0 1 0 .708L3.207 5l2.647 2.646a.5.5 0 1 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                <path fill-rule="evenodd" d="M2.5 5a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+        </a>
+    {% else %}
+        <svg class="bi bi-arrow-right sign" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+             xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                  d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+            <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
+        </svg>
+    {% endif %}
     <div class="dest-block">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <button class="btn btn-danger {% if not only_station %}dropdown-toggle{% endif %}" type="button"
-                        {% if not only_station %}data-toggle="dropdown"{% endif %}
+                <button class="btn btn-danger {% if show_in_index %}dropdown-toggle{% endif %}" type="button"
+                        {% if show_in_index %}data-toggle="dropdown"{% endif %}
                 >抵達站
                 </button>
                 <div class="dropdown-menu">
@@ -35,7 +54,7 @@
         </div>
     </div>
 
-    {% if not only_station %}
+    {% if show_in_index %}
         <input class="mb-3" type="time" name="time" value="06:00">
         <button type="submit" class="submit btn btn-info mb-3 ml-2">Submit</button>
     {% endif %}

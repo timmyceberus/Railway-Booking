@@ -19,12 +19,12 @@
 
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static "/style.css" %}">
-    <title>{% block pagetitle %}{% endblock %}</title>
+    <title>{% block page-title %}{% endblock %}</title>
 </head>
-<body style="background-image: url('/static/{% block bgname %}{% endblock %}');">
+<body style="background-image: url('/static/{% block bg-image %}{% endblock %}');">
 <div class="mask"></div>
 
-<div class="container">
+<div class="container" style="padding-top: {% block head-space %}{% endblock %}">
     {% block content %}
     {% endblock %}
 </div>

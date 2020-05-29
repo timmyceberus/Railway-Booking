@@ -325,7 +325,6 @@ $(document).on('click', '.dest-block .county-btn', function () {
     stationFilterDest.forEach(station => {
         $(`<button class="btn btn-outline-danger btn-sm station-btn" type="button">${station}</button>`).appendTo(destBlockStation);
     });
-
 });
 
 $(document).on('click', '.dropdown-menu', function (event) {
@@ -334,3 +333,14 @@ $(document).on('click', '.dropdown-menu', function (event) {
         event.stopPropagation();
     }
 });
+
+$(document).on('click', '.exchange-station', function () {
+    const beginStationElement = $('.begin-text');
+    const destStationElement = $('.dest-text');
+
+    const beginStationValue = beginStationElement.val();
+    const destStationValue = destStationElement.val();
+
+    beginStationElement.val(destStationValue);
+    destStationElement.val(beginStationValue);
+})

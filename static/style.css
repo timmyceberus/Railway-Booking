@@ -33,7 +33,6 @@ body {
 
 .begin-block,
 .dest-block {
-    margin-right: 10px;
     width: 320px;
 }
 
@@ -51,6 +50,19 @@ body {
 .county-btn,
 .station-btn {
     margin: 2px 2px;
+}
+
+.sign {
+    font-size: 38px;
+    line-height: 38px;
+    margin: 0 10px;
+    color: white;
+}
+
+.exchange-sign:hover {
+    color: wheat;
+    transition: all 0.2s linear;
+    cursor: pointer;
 }
 
 .station-table {

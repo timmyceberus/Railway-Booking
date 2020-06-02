@@ -16,4 +16,22 @@ $(document).on('input', '#ticket-count', function () {
         $('#car-number').removeAttr('disabled');
         $('#seat-number').removeAttr('disabled');
     }
-})
+});
+
+$('form').on('submit', function () {
+    $.ajax({
+        url: '',
+        data:{
+            'begin_station':'',
+            'dest_station': '',
+            'ssn_type': '',
+            'ssn_value': '',
+            'schedule_kind': '',
+            'date': '',
+            'train_id': '',
+            'ticket_count': '',
+            'car_number':'',
+            'seat_number': ''
+        }
+    })
+});

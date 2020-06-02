@@ -26,6 +26,7 @@ $('form').on('submit', function () {
             'dest_station': '',
             'ssn_type': '',
             'ssn_value': '',
+            'name': '',
             'schedule_kind': '',
             'date': '',
             'train_id': '',

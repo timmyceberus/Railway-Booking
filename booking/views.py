@@ -4,6 +4,7 @@ from django.forms.models import model_to_dict
 from django.db import connection
 
 import re
+import random, string
 
 from .models import Station, Train
 
@@ -46,6 +47,7 @@ def search_train(request):
     begin_station = request.GET.get('begin_station')
     dest_station = request.GET.get('dest_station')
     time = request.GET.get('time')
+    print(time)
 
     # Get id from request message
     begin_station_id = re.search('[\\d]{4}', begin_station).group(0)
@@ -69,6 +71,70 @@ def search_train(request):
                             'kind': train[3], 'line_no': train[4]})
 
     return JsonResponse(trains_dict, safe=False)
+
+
+def insert_ticket(request):
+    begin_station = request.POST.get('begin_station')
+    dest_station = request.POST.get('dest_station')
+    ssn_type = request.POST.get('ssn_type')
+    ssn_value = request.POST.get('ssn_value')
+    name = request.POST.get('name')
+    ticket_type = request.POST.get('schedule_kind')
+    date = request.POST.get('date')
+    train_id = request.POST.get('train_id')
+    ticket_count = request.POST.get('ticket_count')
+
+
+    cursor = connection.cursor()
+    cursor.execute('''
+                select MAX(pkind)
+                from person;
+            ''')
+
+    surrogate_key = cursor.fetchall()
+    if surrogate_key is None:
+        cursor.execute('''
+                    insert into person values (%d,'%s','%s');
+                ''' % (0, name, train_id))
+    else:
+        surrogate_key += 1
+        cursor.execute('''
+                    insert into person values (%d,'%s','%s');
+                ''' % (surrogate_key, name, train_id))
+
+    if ssn_type == 'ssn':
+        cursor.execute('''
+                    insert into native values (%d,'%s');
+                ''' % (surrogate_key, ssn_value))
+    elif ssn_type == 'passport':
+        cursor.execute('''
+                    insert into foreigner values (%d,'%s');
+                ''' % (surrogate_key, ssn_value))
+
+    for i in range(0, ticket_count):
+
+        while True:
+            id_temp = ''.join(random.choice(string.digits) for x in range(15))
+            cursor.execute('''
+                select count(*)
+                from ticket
+                where tid='%s';
+            ''' % id_temp)
+            if cursor.fetchall() == 0:
+                break
+        while True:
+            car_no = random.randrange(1, 12)
+            seat_no = random.randrange(1, 52)
+            cursor.execute('''
+                    select count(*)
+                    from ticket
+                    where cno = %d and sno = %d;
+                ''' % (car_no, seat_no))
+            if cursor.fetchall() == 0:
+                cursor.execute('''
+                        insert into ticket values ('%s','%s','%s','%s',%d,%d,'%s',%d,%d);
+                     ''' % (id_temp, begin_station, dest_station, train_id, car_no, seat_no, date, ticket_type, surrogate_key))
+                break
 
 
 def booking(request, tid, bsid, dsid):

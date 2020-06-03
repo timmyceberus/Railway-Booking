@@ -8,92 +8,21 @@ $(function () {
     });
 });
 
-$(document).on('change', 'input[name="ssn-type"]', function () {
-    const value = $(this).val();
-
-    $(this).removeClass('is-valid is-invalid');
-    if (value.length === 0) {
-        $(this).addClass('is-invalid');
-    } else if ($('input[name="ssn-type"]:checked').val() === 'ssn') {
-        if (value.search(/^[A-Z][\d]{9}$/) !== -1) {
-            $(this).addClass('is-valid');
-        } else {
-            $(this).addClass('is-invalid');
-        }
-    } else if ($('input[name="ssn-type"]:checked').val() === 'passport') {
-        if (value.search(/^[A-Z0-9]{9}$/) !== -1) {
-            $(this).addClass('is-valid');
-        } else {
-            $(this).addClass('is-invalid');
-        }
+$(document).on('input', '#ticket-count', function () {
+    if ($(this).val() !== '1') {
+        $('#car-number').attr('disabled', true).val('');
+        $('#seat-number').attr('disabled', true).val('');
     } else {
-        $(this).addClass('is-valid');
-    }
-})
-
-$(document).on('blur', 'input[name="ssn-value"]', function () {
-    const value = $(this).val();
-
-    $(this).removeClass('is-valid is-invalid');
-    if (value.length === 0) {
-        $(this).addClass('is-invalid');
-    } else if ($('input[name="ssn-type"]:checked').val() === 'ssn') {
-        if (value.search(/^[A-Z][\d]{9}$/) !== -1) {
-            $(this).addClass('is-valid');
-        } else {
-            $(this).addClass('is-invalid');
-        }
-    } else if ($('input[name="ssn-type"]:checked').val() === 'passport') {
-        if (value.search(/^[A-Z0-9]{9}$/) !== -1) {
-            $(this).addClass('is-valid');
-        } else {
-            $(this).addClass('is-invalid');
-        }
-    } else {
-        $(this).addClass('is-valid');
+        $('#car-number').removeAttr('disabled');
+        $('#seat-number').removeAttr('disabled');
     }
 });
 
-$(document).on('blur', 'input[name="name"]', function () {
-    const value = $(this).val();
-
-    $(this).removeClass('is-valid is-invalid');
-
-    if (value.length === 0) {
-        $(this).addClass('is-invalid');
-    } else {
-        $(this).addClass('is-valid');
-    }
-});
-
-$(document).on('blur', 'input[name="ticket-count"]', function () {
-    const value = $(this).val();
-
-    $(this).removeClass('is-valid is-invalid');
-
-    if (1 <= value && value <= 6) {
-        $(this).addClass('is-valid');
-    } else {
-        $(this).addClass('is-invalid');
-    }
-});
-
-function validateSuccessful() {
-    return false;
-}
-
-$('form').on('submit', function (event) {
-
-    // event.preventDefault();
-
-    if (!validateSuccessful()) {
-        return false;
-    }
-
+$('form').on('submit', function () {
     $.ajax({
         url: '',
-        data: {
-            'begin_station': '',
+        data:{
+            'begin_station':'',
             'dest_station': '',
             'ssn_type': '',
             'ssn_value': '',
@@ -102,6 +31,8 @@ $('form').on('submit', function (event) {
             'date': '',
             'train_id': '',
             'ticket_count': '',
+            'car_number':'',
+            'seat_number': ''
         }
     })
 });

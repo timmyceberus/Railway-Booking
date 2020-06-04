@@ -14,14 +14,14 @@
                 <label for="ssn" style="margin-right: 10px">身份證字號</label>
                 <input id="passport" type="radio" name="ssn-type" value="passport">
                 <label for="passport">護照號碼</label>
-                <input type="text" class="form-control" name="ssn-value" required>
+                <input type="text" class="form-control" name="ssn-value" value="b123456789" required>
                 <div class="invalid-tooltip">
                   請輸入正確的值.
                 </div>
             </div>
             <div class="form-group col-md-3">
                 <label for="name">姓名</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <input type="text" class="form-control" id="name" name="name" value="jerry" required>
                 <div class="invalid-tooltip">
                   請輸入姓名.
                 </div>
@@ -30,10 +30,10 @@
                 <div class="mb-2">行程種類</div>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-info active">
-                        <input type="radio" name="schedule-kind" autocomplete="off" checked>單程
+                        <input type="radio" name="schedule-kind" autocomplete="off" value="1" checked>單程
                     </label>
                     <label class="btn btn-info">
-                        <input type="radio" name="schedule-kind" autocomplete="off"> 來回
+                        <input type="radio" name="schedule-kind" value="2" autocomplete="off"> 來回
                     </label>
                 </div>
             </div>

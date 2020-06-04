@@ -47,7 +47,6 @@ def search_train(request):
     begin_station = request.GET.get('begin_station')
     dest_station = request.GET.get('dest_station')
     time = request.GET.get('time')
-    print(time)
 
     # Get id from request message
     begin_station_id = re.search('[\\d]{4}', begin_station).group(0)
@@ -74,42 +73,42 @@ def search_train(request):
 
 
 def insert_ticket(request):
-    begin_station = request.POST.get('begin_station')
-    dest_station = request.POST.get('dest_station')
-    ssn_type = request.POST.get('ssn_type')
-    ssn_value = request.POST.get('ssn_value')
-    name = request.POST.get('name')
-    ticket_type = request.POST.get('schedule_kind')
-    date = request.POST.get('date')
-    train_id = request.POST.get('train_id')
-    ticket_count = request.POST.get('ticket_count')
+    begin_station = request.GET.get('begin_station')
+    begin_station_id = re.search('[\\d]{4}', begin_station).group(0)
 
+    dest_station = request.GET.get('dest_station')
+    dest_station_id = re.search('[\\d]{4}', dest_station).group(0)
+
+    ssn_type = request.GET.get('ssn_type')
+    ssn_value = request.GET.get('ssn_value')
+    name = request.GET.get('name')
+    ticket_type = request.GET.get('schedule_kind')
+    date = request.GET.get('date')
+    train_id = request.GET.get('train_id')
+    ticket_count = request.GET.get('ticket_count')
+    ticket_count = int(ticket_count)
 
     cursor = connection.cursor()
-    cursor.execute('''
-                select MAX(pkind)
-                from person;
-            ''')
 
-    surrogate_key = cursor.fetchall()
-    if surrogate_key is None:
-        cursor.execute('''
-                    insert into person values (%d,'%s','%s');
-                ''' % (0, name, train_id))
+    if not check_ssn_conflict(ssn_value):
+        surrogate_key = insert_person(name, train_id, ssn_type, ssn_value)
     else:
-        surrogate_key += 1
-        cursor.execute('''
-                    insert into person values (%d,'%s','%s');
-                ''' % (surrogate_key, name, train_id))
-
-    if ssn_type == 'ssn':
-        cursor.execute('''
-                    insert into native values (%d,'%s');
-                ''' % (surrogate_key, ssn_value))
-    elif ssn_type == 'passport':
-        cursor.execute('''
-                    insert into foreigner values (%d,'%s');
-                ''' % (surrogate_key, ssn_value))
+        if check_ssn_conflict(ssn_value) == 'native':
+            cursor.execute('''
+                    select pkind
+                    from native
+                    where ssn='%s';
+                ''' % ssn_value)
+            temp = cursor.fetchall()
+            surrogate_key = temp[0][0]
+        else:
+            cursor.execute('''
+                        select pkind
+                        from foreigner
+                        where psp_no='%s';
+                    ''' % ssn_value)
+            temp = cursor.fetchall()
+            surrogate_key = temp[0][0]
 
     for i in range(0, ticket_count):
 
@@ -120,7 +119,8 @@ def insert_ticket(request):
                 from ticket
                 where tid='%s';
             ''' % id_temp)
-            if cursor.fetchall() == 0:
+            temp = cursor.fetchall()
+            if temp[0][0] == 0:
                 break
         while True:
             car_no = random.randrange(1, 12)
@@ -130,11 +130,68 @@ def insert_ticket(request):
                     from ticket
                     where cno = %d and sno = %d;
                 ''' % (car_no, seat_no))
-            if cursor.fetchall() == 0:
+            temp = cursor.fetchall()
+
+            if temp[0][0] == 0:
                 cursor.execute('''
-                        insert into ticket values ('%s','%s','%s','%s',%d,%d,'%s',%d,%d);
-                     ''' % (id_temp, begin_station, dest_station, train_id, car_no, seat_no, date, ticket_type, surrogate_key))
+                        insert into ticket values ('%s','%s','%s','%s',%d,%d,'%s',%s,%d);
+                     ''' % (id_temp, begin_station_id, dest_station_id, train_id, car_no, seat_no, date, ticket_type, surrogate_key))
                 break
+    return render(request)
+
+
+def check_ssn_conflict(ssn):
+    cursor = connection.cursor()
+    cursor.execute('''
+            select count(*)
+            from native
+            where ssn='%s';
+       ''' % ssn)
+    temp = cursor.fetchall()
+    if temp[0][0] == 1:
+        return 'native'
+
+    cursor.execute('''
+                select count(*)
+                from foreigner
+                where psp_no='%s';
+           ''' % ssn)
+    temp = cursor.fetchall()
+    if temp[0][0] == 1:
+        return 'foreigner'
+
+    return False
+
+
+def insert_person(name, train_id, ssn_type, ssn_value):
+    cursor = connection.cursor()
+    cursor.execute('''
+                    select MAX(pkind)
+                    from person;
+                ''')
+
+    temp = cursor.fetchall()
+    surrogate_key = temp[0][0]
+    if surrogate_key is None:
+        cursor.execute('''
+                        insert into person values (%d,'%s','%s');
+                    ''' % (0, name, train_id))
+        surrogate_key = 0
+    else:
+        surrogate_key += 1
+        cursor.execute('''
+                        insert into person values (%d,'%s','%s');
+                    ''' % (surrogate_key, name, train_id))
+
+    if ssn_type == 'ssn':
+        cursor.execute('''
+                        insert into native values (%d,'%s');
+                     ''' % (surrogate_key, ssn_value))
+    else:
+        cursor.execute('''
+                        insert into foreigner values (%d,'%s');
+                    ''' % (surrogate_key, ssn_value))
+    return surrogate_key
 
 
 def booking(request, tid, bsid, dsid):

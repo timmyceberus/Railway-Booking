@@ -34,6 +34,7 @@ body {
 .begin-block,
 .dest-block {
     width: 320px;
+    display: inline-block;
 }
 
 .begin-station-select,

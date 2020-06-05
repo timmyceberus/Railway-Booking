@@ -99,29 +99,32 @@ def insert_ticket(request):
                     from native
                     where ssn='%s';
                 ''' % ssn_value)
-            temp = cursor.fetchall()
-            surrogate_key = temp[0][0]
+            result = cursor.fetchall()
+            surrogate_key = result[0][0]
         else:
             cursor.execute('''
                         select pkind
                         from foreigner
                         where psp_no='%s';
                     ''' % ssn_value)
-            temp = cursor.fetchall()
-            surrogate_key = temp[0][0]
+            result = cursor.fetchall()
+            surrogate_key = result[0][0]
 
     for i in range(0, ticket_count):
 
+        # Generate ticket ID randomly, then check if the ID is repeated, if true, regenerated it.
         while True:
-            id_temp = ''.join(random.choice(string.digits) for x in range(15))
+            ticket_id = ''.join(random.choice(string.digits) for x in range(15))
             cursor.execute('''
                 select count(*)
                 from ticket
                 where tid='%s';
-            ''' % id_temp)
-            temp = cursor.fetchall()
-            if temp[0][0] == 0:
+            ''' % ticket_id)
+            result = cursor.fetchall()
+            if result[0][0] == 0:
                 break
+
+        # Generate seat randomly, then check if the seat is repeated, if true, regenerated it.
         while True:
             car_no = random.randrange(1, 12)
             seat_no = random.randrange(1, 52)
@@ -130,12 +133,12 @@ def insert_ticket(request):
                     from ticket
                     where cno = %d and sno = %d;
                 ''' % (car_no, seat_no))
-            temp = cursor.fetchall()
+            result = cursor.fetchall()
 
-            if temp[0][0] == 0:
+            if result[0][0] == 0:
                 cursor.execute('''
                         insert into ticket values ('%s','%s','%s','%s',%d,%d,'%s',%s,%d);
-                     ''' % (id_temp, begin_station_id, dest_station_id, train_id, car_no, seat_no, date, ticket_type, surrogate_key))
+                     ''' % (ticket_id, begin_station_id, dest_station_id, train_id, car_no, seat_no, date, ticket_type, surrogate_key))
                 break
     return render(request)
 
@@ -147,8 +150,8 @@ def check_ssn_conflict(ssn):
             from native
             where ssn='%s';
        ''' % ssn)
-    temp = cursor.fetchall()
-    if temp[0][0] == 1:
+    result = cursor.fetchall()
+    if result[0][0] == 1:
         return 'native'
 
     cursor.execute('''
@@ -156,8 +159,8 @@ def check_ssn_conflict(ssn):
                 from foreigner
                 where psp_no='%s';
            ''' % ssn)
-    temp = cursor.fetchall()
-    if temp[0][0] == 1:
+    result = cursor.fetchall()
+    if result[0][0] == 1:
         return 'foreigner'
 
     return False
@@ -170,8 +173,8 @@ def insert_person(name, train_id, ssn_type, ssn_value):
                     from person;
                 ''')
 
-    temp = cursor.fetchall()
-    surrogate_key = temp[0][0]
+    result = cursor.fetchall()
+    surrogate_key = result[0][0]
     if surrogate_key is None:
         cursor.execute('''
                         insert into person values (%d,'%s','%s');

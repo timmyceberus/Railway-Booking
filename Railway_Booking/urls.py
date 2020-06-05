@@ -26,5 +26,6 @@ urlpatterns = [
     path('allstations/', views.get_all_stations),
     path('TrainSchedule/', views.get_train_schedule),
     path('TicketInsert/', views.insert_ticket),
-    path('SearchTrain/', views.search_train)
+    path('SearchTrain/', views.search_train),
+    path('Success/', views.success)
 ]

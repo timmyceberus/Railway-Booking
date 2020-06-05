@@ -222,6 +222,10 @@ def booking(request, tid, bsid, dsid):
     return render(request, 'booking.html', context=context)
 
 
+def success(request):
+    return render(request, 'success.html')
+
+
 # Example
 def get_stations(request):
     # Get information from ajax requests

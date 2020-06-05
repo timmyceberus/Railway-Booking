@@ -1,0 +1,10 @@
+.success-block {
+    margin: 30% auto auto;
+    width: 50%;
+    text-align: center;
+}
+
+.success-block div:nth-child(1){
+    color: #2fff39;
+    font-size: 60px;
+}

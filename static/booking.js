@@ -65,50 +65,24 @@ $(document).on('blur', 'input[name="ticket-count"]', function () {
     }
 });
 
-$('form').on('submit', function (event) {
+$(document).on('click','.submit-ticket', function (event) {
     event.preventDefault();
+    let bsId = $('.begin-text').val().split(' ');
+    let dsId = $('.dest-text').val().split(' ');
 
-    let beginStationName, destStationName, ssnType, ssnValue;
-    let name, scheduleKind, date, trainId, ticketCount;
+    let ssnType = $('input[name=ssn-type]:checked').val();
+    let ssnValue = $('input[name=ssn-value]').val();
+    let name = $('input[name=name]').val();
+    let scheduleKind = $('input[name=schedule-kind]').val();
+    let date = $('input[name=date]').val();
+    let trainId = $('input[name=train-id]').val();
+    let ticketCount = $('input[name=ticket-count]').val();
 
-    beginStationName = $('.begin-text').val()
-    destStationName = $('.dest-text').val()
+    console.log(ssnType)
 
-    $(this).serializeArray().forEach(element =>{
-        if (element['name'] === 'ssn-type')
-            ssnType = element['value'];
-        if (element['name'] === 'ssn-value')
-            ssnValue = element['value'];
-        if (element['name'] === 'name')
-            name = element['value'];
-        if (element['name'] === 'schedule-kind')
-            scheduleKind = element['value'];
-        if (element['name'] === 'date')
-            date = element['value'];
-        if (element['name'] === 'ticket-count')
-            ticketCount = element['value'];
-        if (element['name'] === 'train-id')
-            trainId = element['value'];
-    });
 
-    $.ajax({
-        url: '../../../TicketInsert',
-        data:{
-            'begin_station': beginStationName,
-            'dest_station': destStationName,
-            'ssn_type': ssnType,
-            'ssn_value': ssnValue,
-            'name': name,
-            'schedule_kind': scheduleKind,
-            'date': date,
-            'train_id': trainId,
-            'ticket_count': ticketCount
-        },
-        dataType: 'json',
-        success: function (data) { // When request success
-        },
-        error: function (data) { // An error occurred
-        }
-    })
-
+    window.location.assign(`http://127.0.0.1:8000/TicketInsert/${bsId[0]}/${dsId[0]}/${ssnType}` +
+    `/${ssnValue}/${name}/${scheduleKind}/${date}/${trainId}/${ticketCount}`);
 });
+
+

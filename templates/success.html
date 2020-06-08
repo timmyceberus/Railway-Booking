@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="/static/success.css">
     <div class="success-block">
         <div>訂票成功</div>
+        <div class="ticket-no">訂票編號</div>
+        {% for ticket_id in ticket_id_list %}
+            <div class="ticket-id">{{ ticket_id }}</div>
+        {% endfor %}
         <div><a href="/">返回首頁</a></div>
         <div><a href="/">查詢車票</a></div>
     </div>

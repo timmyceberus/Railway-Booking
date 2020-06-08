@@ -72,20 +72,8 @@ def search_train(request):
     return JsonResponse(trains_dict, safe=False)
 
 
-def insert_ticket(request):
-    begin_station = request.GET.get('begin_station')
-    begin_station_id = re.search('[\\d]{4}', begin_station).group(0)
+def insert_ticket(request, bsid, dsid, ssn_type, ssn_value, name, ticket_type, date, train_id, ticket_count):
 
-    dest_station = request.GET.get('dest_station')
-    dest_station_id = re.search('[\\d]{4}', dest_station).group(0)
-
-    ssn_type = request.GET.get('ssn_type')
-    ssn_value = request.GET.get('ssn_value')
-    name = request.GET.get('name')
-    ticket_type = request.GET.get('schedule_kind')
-    date = request.GET.get('date')
-    train_id = request.GET.get('train_id')
-    ticket_count = request.GET.get('ticket_count')
     ticket_count = int(ticket_count)
 
     cursor = connection.cursor()
@@ -110,7 +98,10 @@ def insert_ticket(request):
             result = cursor.fetchall()
             surrogate_key = result[0][0]
 
+    ticket_id_list = []
+
     for i in range(0, ticket_count):
+
 
         # Generate ticket ID randomly, then check if the ID is repeated, if true, regenerated it.
         while True:
@@ -120,10 +111,12 @@ def insert_ticket(request):
                 from ticket
                 where tid='%s';
             ''' % ticket_id)
+
             result = cursor.fetchall()
             if result[0][0] == 0:
                 break
 
+        ticket_id_list.append(ticket_id)
         # Generate seat randomly, then check if the seat is repeated, if true, regenerated it.
         while True:
             car_no = random.randrange(1, 12)
@@ -138,9 +131,14 @@ def insert_ticket(request):
             if result[0][0] == 0:
                 cursor.execute('''
                         insert into ticket values ('%s','%s','%s','%s',%d,%d,'%s',%s,%d);
-                     ''' % (ticket_id, begin_station_id, dest_station_id, train_id, car_no, seat_no, date, ticket_type, surrogate_key))
+                     ''' % (ticket_id, bsid, dsid, train_id, car_no, seat_no, date, ticket_type, surrogate_key))
                 break
-    return render(request)
+
+    context = {
+        'ticket_id_list': ticket_id_list
+    }
+
+    return render(request, 'success.html', context=context)
 
 
 def check_ssn_conflict(ssn):
@@ -167,6 +165,7 @@ def check_ssn_conflict(ssn):
 
 
 def insert_person(name, train_id, ssn_type, ssn_value):
+
     cursor = connection.cursor()
     cursor.execute('''
                     select MAX(pkind)
@@ -186,7 +185,7 @@ def insert_person(name, train_id, ssn_type, ssn_value):
                         insert into person values (%d,'%s','%s');
                     ''' % (surrogate_key, name, train_id))
 
-    if ssn_type == 'ssn':
+    if 'ssn' in ssn_type:
         cursor.execute('''
                         insert into native values (%d,'%s');
                      ''' % (surrogate_key, ssn_value))
@@ -222,8 +221,8 @@ def booking(request, tid, bsid, dsid):
     return render(request, 'booking.html', context=context)
 
 
-def success(request):
-    return render(request, 'success.html')
+# def success(request):
+#     return render(request, 'success.html')
 
 
 # Example

@@ -244,7 +244,6 @@ $(document).on('click','.book-ticket', function (event) {
     event.preventDefault();
     bsId = $('.begin-text').val().split(' ');
     dsId = $('.dest-text').val().split(' ');
-    console.log(`http://127.0.0.1:8000/booking/${$(this).data('tid')}/${bsId[0]}/${dsId[0]}`)
     window.location.assign(`http://127.0.0.1:8000/booking/${$(this).data('tid')}/${bsId[0]}/${dsId[0]}`);
 })
 

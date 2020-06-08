@@ -12,9 +12,9 @@
             <div class="form-group col-md-3">
                 <input id="ssn" type="radio" name="ssn-type" value="ssn" checked>
                 <label for="ssn" style="margin-right: 10px">身份證字號</label>
-                <input id="passport" type="radio" name="ssn-type" value="passport">
+                <input id="passport" type="radio" name="ssn-type" value="passport" >
                 <label for="passport">護照號碼</label>
-                <input type="text" class="form-control" name="ssn-value" required>
+                <input type="text" class="form-control" name="ssn-value" value="B123456789" required>
                 <div class="invalid-tooltip">
                   請輸入正確的值.
                 </div>
@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">訂票</button>
+        <button type="submit" class="submit-ticket btn btn-primary">訂票</button>
     </form>
 {% endblock %}
 

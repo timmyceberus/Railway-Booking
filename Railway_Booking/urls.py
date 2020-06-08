@@ -23,9 +23,10 @@ urlpatterns = [
     path('', views.show_index),
     path('station/', views.get_stations),
     path('booking/<tid>/<bsid>/<dsid>', views.booking),
-    path('TicketInsert/<bsid>/<dsid>/<ssn_type>/<ssn_value>/<name>/<ticket_type>/<date>/<train_id>/<ticket_count>', views.insert_ticket),
     path('allstations/', views.get_all_stations),
     path('TrainSchedule/', views.get_train_schedule),
-    path('SearchTrain/', views.search_train)
-
+    path('TicketInsert/<bsid>/<dsid>/<ssn_type>/<ssn_value>/<name>/<ticket_type>/<date>/<train_id>/<ticket_count>', views.insert_ticket),
+    path('SearchTrain/', views.search_train),
+    path('SearchTicket/', views.search_ticket),
+    path('GetTicket/', views.find_ticket_from_DB)
 ]

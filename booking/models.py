@@ -78,13 +78,10 @@ class Ticket(models.Model):
     cno = models.IntegerField()
     sno = models.IntegerField()
     tdate = models.DateField()
-    ontime = models.TimeField()
-    offtime = models.TimeField()
     ttype = models.IntegerField()
     pkind = models.ForeignKey(Person, models.DO_NOTHING, db_column='pkind')
 
     class Meta:
         managed = False
         db_table = 'ticket'
-        unique_together = (('tdate', 'ttrain', 'cno', 'sno'),)
 

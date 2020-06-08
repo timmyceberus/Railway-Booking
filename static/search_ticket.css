@@ -1,0 +1,15 @@
+form {
+    /*top: 40vh;*/
+    position: relative;
+    transition: all 0.7s cubic-bezier(0, 0, 0.2, 1.11);
+}
+
+.ticket-info {
+    font-weight: bold;
+    margin: auto;
+    text-align: center;
+}
+
+td {
+    width: 110px;
+}

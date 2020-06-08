@@ -27,5 +27,7 @@ urlpatterns = [
     path('TrainSchedule/', views.get_train_schedule),
     path('TicketInsert/', views.insert_ticket),
     path('SearchTrain/', views.search_train),
-    path('Success/', views.success)
+    path('Success/', views.success),
+    path('SearchTicket/', views.search_ticket),
+    path('GetTicket/', views.find_ticket_from_DB)
 ]

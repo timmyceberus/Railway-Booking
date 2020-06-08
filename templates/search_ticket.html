@@ -1,0 +1,58 @@
+{% extends './template/base.html' %}
+{% load static %}
+{% block page-title %}訂票 - 台鐵訂票系統網{% endblock %}
+{% block bg-image %}Taroko.jpg{% endblock %}
+{% block head-space %}30px{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="/static/search_ticket.css">
+    <form class="needs-validation" novalidate>
+        <div class="form-row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 mb-3">
+                <label for="ticket-no">車票代號</label>
+                <input type="text" class="form-control" id="ticket-no" required>
+                <div class="invalid-feedback">
+                    請輸入正確格式的車票代號
+                </div>
+            </div>
+            <div class="col-md-3">
+                <input class="btn btn-info" style="margin-top: 32px" type="submit" value="Submit">
+            </div>
+        </div>
+    </form>
+    <table class="ticket-info">
+        <tbody>
+        <tr>
+            <td colspan="2">台灣鐵路局</td>
+        </tr>
+        <tr>
+            <td class="date">2019.06.06</td>
+            <td>車次 <span class="train-id">203</span></td>
+        </tr>
+        <tr>
+            <td class="ticket-type">單程</td>
+            <td class="train-kind">自強</td>
+        </tr>
+        <tr>
+            <td class="get-on-station">花蓮</td>
+            <td><span class="get-on-time">12:55</span>開</td>
+        </tr>
+        <tr>
+            <td>往</td>
+            <td><span class="car-number">4</span>車<span class="seat-number">2</span>號</td>
+        </tr>
+        <tr>
+            <td class="get-off-station">台北</td>
+            <td><span class="get-off-time">15:07</span>到</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>NT$<span class="price">440</span></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="ticket-id">123456789012345</td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
+{% block script %}{% static "/search_ticket.js" %}{% endblock %}

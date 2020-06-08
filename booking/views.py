@@ -4,9 +4,13 @@ from django.forms.models import model_to_dict
 from django.db import connection
 
 import re
-import random, string
+import random
+import string
+from datetime import datetime, date
 
-from .models import Station, Train
+from .models import Station, Train, Ticket, StopAt
+
+cursor = connection.cursor()
 
 
 # Create your views here.
@@ -16,7 +20,6 @@ def show_index(request):
 
 def get_train_schedule(request):
     tid = request.GET.get('train_id')
-    cursor = connection.cursor()
     cursor.execute('''
             select s.sname,st.arrtime,st.deptime
             from stop_at as st,train as t,station as s
@@ -53,7 +56,6 @@ def search_train(request):
     dest_station_id = re.search('[\\d]{4}', dest_station).group(0)
 
     # Find which train satisfied the request
-    cursor = connection.cursor()
     cursor.execute('''
         select st1.tid, st1.arrtime, st2.arrtime, t.kind, t.line_no
         from stop_at as st1, stop_at as st2, train as t
@@ -87,8 +89,6 @@ def insert_ticket(request):
     train_id = request.GET.get('train_id')
     ticket_count = request.GET.get('ticket_count')
     ticket_count = int(ticket_count)
-
-    cursor = connection.cursor()
 
     if not check_ssn_conflict(ssn_value):
         surrogate_key = insert_person(name, train_id, ssn_type, ssn_value)
@@ -138,13 +138,13 @@ def insert_ticket(request):
             if result[0][0] == 0:
                 cursor.execute('''
                         insert into ticket values ('%s','%s','%s','%s',%d,%d,'%s',%s,%d);
-                     ''' % (ticket_id, begin_station_id, dest_station_id, train_id, car_no, seat_no, date, ticket_type, surrogate_key))
+                     ''' % (ticket_id, begin_station_id, dest_station_id, train_id, car_no, seat_no, date, ticket_type,
+                            surrogate_key))
                 break
     return render(request)
 
 
 def check_ssn_conflict(ssn):
-    cursor = connection.cursor()
     cursor.execute('''
             select count(*)
             from native
@@ -167,7 +167,6 @@ def check_ssn_conflict(ssn):
 
 
 def insert_person(name, train_id, ssn_type, ssn_value):
-    cursor = connection.cursor()
     cursor.execute('''
                     select MAX(pkind)
                     from person;
@@ -224,6 +223,58 @@ def booking(request, tid, bsid, dsid):
 
 def success(request):
     return render(request, 'success.html')
+
+
+def search_ticket(request):
+    return render(request, 'search_ticket.html')
+
+
+def find_ticket_from_DB(request):
+    tid = request.GET.get('tid')
+
+    ticket_info = Ticket.objects.get(tid=tid)
+
+    # Cannot found the ticket from tid
+    if ticket_info is None:
+        return JsonResponse(request, {'status': 'fail'})
+
+    ticket_id = ticket_info.tid
+    get_on_station_id = ticket_info.geton_id
+    get_off_station_id = ticket_info.getoff_id
+    take_train_id = ticket_info.ttrain_id
+    car_number = ticket_info.cno
+    seat_number = ticket_info.sno
+    tdate = ticket_info.tdate
+    ticket_type = '單程' if ticket_info.ttype == 1 else "來回"
+
+
+    get_on_station = Station.objects.get(sid=get_on_station_id).sname
+    get_off_station = Station.objects.get(sid=get_off_station_id).sname
+
+    get_on_time = StopAt.objects.get(tid=take_train_id, sid=get_on_station_id).arrtime
+    get_off_time = StopAt.objects.get(tid=take_train_id, sid=get_off_station_id).arrtime
+
+    train_kind = Train.objects.get(tid=take_train_id).kind
+    train_kind = '自強' if train_kind == 0 else '莒光' if train_kind == 1 else '復興'
+
+    price = int((datetime.combine(date.today(), get_off_time)
+                 - datetime.combine(date.today(), get_on_time)).total_seconds() // 30)
+
+    context = {
+        'date': tdate,
+        'ticket_id': ticket_id,
+        'train_id': take_train_id,
+        'get_on_station': get_on_station,
+        'get_off_station': get_off_station,
+        'get_on_time': get_on_time,
+        'get_off_time': get_off_time,
+        'ticket_type': ticket_type,
+        'train_kind': train_kind,
+        'car_number': car_number,
+        'seat_number': seat_number,
+        'price': price
+    }
+    return JsonResponse(context, safe=False)
 
 
 # Example

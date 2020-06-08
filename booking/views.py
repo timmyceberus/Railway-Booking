@@ -257,13 +257,13 @@ def find_ticket_from_DB(request):
                  - datetime.combine(date.today(), get_on_time)).total_seconds() // 30)
 
     context = {
-        'date': tdate,
+        'date': str(tdate).replace('-', '.'),
         'ticket_id': ticket_id,
         'train_id': take_train_id,
         'get_on_station': get_on_station,
         'get_off_station': get_off_station,
-        'get_on_time': get_on_time,
-        'get_off_time': get_off_time,
+        'get_on_time': str(get_on_time)[:-3],
+        'get_off_time': str(get_off_time)[:-3],
         'ticket_type': ticket_type,
         'train_kind': train_kind,
         'car_number': car_number,

@@ -4,12 +4,28 @@ form {
     transition: all 0.7s cubic-bezier(0, 0, 0.2, 1.11);
 }
 
+:root {
+    --bg-color: hsl(256, 33, 10);
+    --dot-color: hsl(256, 33, 70);
+
+    --dot-size: 1px;
+    --dot-space: 22px;
+}
+
 .ticket-info {
     font-weight: bold;
     margin: auto;
     text-align: center;
+    background: -webkit-radial-gradient(#f5eeaf 50%, transparent 16%), -webkit-radial-gradient(#f5eeaf 50%, transparent 16%), white;
+    background-position: 0 0, 30px 30px;
+    background-size: 30px 30px;
 }
 
 td {
     width: 110px;
+}
+
+tr {
+    height: 32px;
+    line-height: 32px;
 }

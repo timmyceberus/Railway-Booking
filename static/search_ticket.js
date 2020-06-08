@@ -1,4 +1,4 @@
-$('#ticket-no').on('blur', function () {
+$('#ticket-no').on('blur change', function () {
     const value = $(this).val();
 
     $(this).removeClass('is-valid is-invalid');

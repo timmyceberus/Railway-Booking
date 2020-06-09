@@ -78,6 +78,8 @@ $(document).on('click','.submit-ticket', function (event) {
     let trainId = $('input[name=train-id]').val();
     let ticketCount = $('input[name=ticket-count]').val();
 
+    console.log(ssnType)
+
 
     window.location.assign(`http://127.0.0.1:8000/TicketInsert/${bsId[0]}/${dsId[0]}/${ssnType}` +
     `/${ssnValue}/${name}/${scheduleKind}/${date}/${trainId}/${ticketCount}`);

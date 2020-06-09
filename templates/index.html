@@ -1,9 +1,9 @@
 {% extends './template/base.html' %}
 {% load static %}
 {% block page-title %}查詢 - 台鐵訂票系統網{% endblock %}
-{% block bg-image %}Taroko.jpg{% endblock %}
+{% block bg-image %}image/Taroko.jpg{% endblock %}
 {% block content %}
-    {% include 'component/form.html' with bgst='1020 板橋' dsst='1000 臺北' show_in_index=True on_top='40vh' %}
+    {% include 'component/form.html' with bgst='1020 板橋' dsst='1000 臺北' show_in_index=True on_top='35vh' %}
     <div style="padding-left: 5px; padding-right: 5px; padding-bottom: 1px; backdrop-filter: blur(10px);">
         <table class="table station-table" style="display: none">
             <thead>
@@ -42,4 +42,4 @@
         </div>
     </div>
 {% endblock %}
-{% block script %}{% static "/script.js" %}{% endblock %}
+{% block script %}{% static "/script/script.js" %}{% endblock %}

@@ -1,9 +1,9 @@
 {% extends './template/base.html' %}
 {% load static %}
 {% block page-title %}訂票 - 台鐵訂票系統網{% endblock %}
-{% block bg-image %}Taroko.jpg{% endblock %}
-{% block head-space %}30vh{% endblock %}
+{% block bg-image %}image/Taroko.jpg{% endblock %}
 {% block content %}
+    <link rel="stylesheet" href="/static/style/booking.css">
     {% include './component/form.html' with bgst=full_begin_station dsst=full_dest_station show_in_index=False on_top='0' only %}
     <form method="post" style="color:white;" class="needs-validation" novalidate>
         {% csrf_token %}
@@ -12,18 +12,18 @@
             <div class="form-group col-md-3">
                 <input id="ssn" type="radio" name="ssn-type" value="ssn" checked>
                 <label for="ssn" style="margin-right: 10px">身份證字號</label>
-                <input id="passport" type="radio" name="ssn-type" value="passport" >
+                <input id="passport" type="radio" name="ssn-type" value="passport">
                 <label for="passport">護照號碼</label>
                 <input type="text" class="form-control" name="ssn-value" value="B123456789" required>
                 <div class="invalid-tooltip">
-                  請輸入正確的值.
+                    請輸入正確的值.
                 </div>
             </div>
             <div class="form-group col-md-3">
                 <label for="name">姓名</label>
                 <input type="text" class="form-control" id="name" name="name" value="jerry" required>
                 <div class="invalid-tooltip">
-                  請輸入姓名.
+                    請輸入姓名.
                 </div>
             </div>
             <div class="form-group col-md-3">
@@ -47,17 +47,27 @@
             <div class="form-group col-md-3">
                 <label for="date">日期</label>
                 <input type="date" class="form-control" name="date" id="date" required>
+                <div class="invalid-tooltip">
+                    請輸入正確的日期
+                </div>
             </div>
             <div class="form-group col-md-2">
                 <label for="ticket-count">票數</label>
-                <input type="number" class="form-control" id="ticket-count" name="ticket-count" min="1" max="6" value="1">
+                <input type="number" class="form-control" id="ticket-count" name="ticket-count" min="1" max="6"
+                       value="1">
                 <div class="invalid-tooltip">
-                  請輸入正確的票數:1~6
+                    請輸入正確的票數:1~6
                 </div>
             </div>
         </div>
-        <button type="submit" class="submit-ticket btn btn-primary">訂票</button>
+        <div class="form-row">
+            <div class="form-group col-md-6"></div>
+            <div class="form-group col-md-6">
+                <button type="submit" class="submit-ticket btn btn-primary">訂票</button>
+            </div>
+        </div>
     </form>
+    <script>let getOnTime = "{{ get_on_time }}";</script>
 {% endblock %}
 
-{% block script %}{% static "/booking.js" %}{% endblock %}
+{% block script %}{% static "/script/booking.js" %}{% endblock %}

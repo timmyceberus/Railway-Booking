@@ -58,6 +58,9 @@ $(document).on('click','.delete-submit', function (event) {
  * @param {Object} data - Ticket information
  */
 function showTicketInfo(data){
+
+    $('.ticket-info').show();
+
     $('.date').text(data['date']);
     $('.train-id').text(data['train_id']);
     $('.ticket-type').text(data['ticket_type']);
@@ -75,8 +78,6 @@ function showTicketInfo(data){
 $('form').on('submit', function (event) {
     event.preventDefault();
 
-    // $(this).css('top', '10vh');
-
     $.ajax({
             url: '/GetTicket/',
             data: {
@@ -87,5 +88,4 @@ $('form').on('submit', function (event) {
             }
         }
     )
-
 })

@@ -4,12 +4,8 @@ form {
     transition: all 0.7s cubic-bezier(0, 0, 0.2, 1.11);
 }
 
-:root {
-    --bg-color: hsl(256, 33, 10);
-    --dot-color: hsl(256, 33, 70);
-
-    --dot-size: 1px;
-    --dot-space: 22px;
+label {
+    color: white;
 }
 
 .ticket-info {

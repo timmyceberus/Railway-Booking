@@ -26,7 +26,7 @@ $(function () {
  * @param value - The ssn value.
  * @returns {boolean} - Valid SSN or not.
  */
-function isSsnValid(SSN_type, value){
+function isSsnValid(SSN_type, value) {
     if (value.length === 0) {
         return false;
     } else if ($('input[name="ssn-type"]:checked').val() === 'ssn') {
@@ -44,7 +44,7 @@ $(document).on('blur keyup click', 'input[name="ssn-type"], input[name="ssn-valu
     const ssnType = $('input[name="ssn-type"]:checked').val();
 
     ssnValue.removeClass('is-valid is-invalid');
-    if(isSsnValid(ssnType, value)){
+    if (isSsnValid(ssnType, value)) {
         ssnValue.addClass('is-valid');
     } else {
         ssnValue.addClass('is-invalid');
@@ -71,7 +71,7 @@ $(document).on('click', '.submit-ticket', function (event) {
     let ssnType = $('input[name=ssn-type]:checked').val();
     let ssnValue = $('input[name=ssn-value]').val();
     let name = $('input[name=name]').val();
-    let scheduleKind = $('input[name=schedule-kind]').val();
+    let scheduleKind = $('input[name=schedule-kind]:checked').val();
     let date = $('input[name=date]').val();
     let trainId = $('input[name=train-id]').val();
     let ticketCount = $('input[name=ticket-count]').val();

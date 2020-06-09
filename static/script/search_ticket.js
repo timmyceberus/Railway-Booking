@@ -1,11 +1,12 @@
-$('#ticket-no').on('blur change', function () {
+$('#ticket-no').on('blur keyup', function () {
     const value = $(this).val();
 
     $(this).removeClass('is-valid is-invalid');
 
-    if (value.search(/^[A-Z0-9]{15}/) !== -1) {
+    if (value.search(/^[0-9]{15}/) !== -1) {
         $(this).addClass('is-valid');
     } else {
+        $('.invalid-feedback').text('請輸入正確格式的車票代號');
         $(this).addClass('is-invalid');
     }
 })
@@ -95,6 +96,16 @@ $('form').on('submit', function (event) {
             success: function (data) {
                 showTicketInfo(data);
                 showDeleteButton();
+                if(data['status']==='success'){
+                    showTicketInfo(data);
+                }
+                else {
+                    $('#ticket-no')
+                        .removeClass('is-valid')
+                        .addClass('is-invalid');
+                    $('.invalid-feedback').text('找不到車票');
+                    $('.ticket-info').hide();
+                }
             }
         }
     )

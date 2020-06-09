@@ -20,8 +20,13 @@ body {
 
 .container {
     padding-top: 30px;
-    min-height: 100%;
+    min-height: 92%;
     background-color: rgba(0, 0, 0, 0.3);
+}
+
+.navbar {
+    max-height: 8%;
+    height: 8%;
 }
 
 .search-form {

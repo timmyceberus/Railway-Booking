@@ -2,8 +2,9 @@
 {% load static %}
 {% block page-title %}訂票 - 台鐵訂票系統網{% endblock %}
 {% block bg-image %}Taroko.jpg{% endblock %}
-{% block head-space %}30vh{% endblock %}
+{#{% block head-space %}30vh{% endblock %}#}
 {% block content %}
+    <link rel="stylesheet" href="/static/booking.css">
     {% include './component/form.html' with bgst=full_begin_station dsst=full_dest_station show_in_index=False on_top='0' only %}
     <form method="post" style="color:white;" class="needs-validation" novalidate>
         {% csrf_token %}

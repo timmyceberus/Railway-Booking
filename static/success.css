@@ -1,19 +1,19 @@
 .success-block {
-    margin: auto;
+    margin: 10% auto auto;
     width: 50%;
     text-align: center;
 }
 
-.success-block div:nth-child(1){
+.success-block div:nth-child(1) {
     color: #2fff39;
     font-size: 60px;
 }
 
-.ticket-no{
+.ticket-no {
     color: #FAFAD2;
     font-size: 40px;
 }
 
-.ticket-id{
+.ticket-id {
     color: #FFFFF0;
 }

@@ -10,8 +10,9 @@ $('#ticket-no').on('blur change', function () {
     }
 })
 
-$(document).on('click','.delete', function () {
+$(document).on('click', '.delete', function () {
     $('.delete-ticket').empty()
+    $('.delete-ticket-submit').empty()
     $('.delete-ticket').append(
         $('<input id="ssn" type="radio" name="ssn-type" value="ssn" checked>'),
         $('<label for="ssn" style="margin-right: 10px">身份證字號</label>'),
@@ -21,11 +22,11 @@ $(document).on('click','.delete', function () {
         $('<div class="invalid-tooltip">請輸入正確的值.</div>')
     )
     $('.delete-ticket-submit').append(
-        $('<input class="btn btn-danger delete-submit" style="margin-top: 32px" type="button" value="submit">')
+        $('<input class="btn btn-danger delete-submit" style="margin-top: 32px" type="button" value="Submit">')
     )
 })
 
-$(document).on('blur', 'input[name="ssn-value"]', function () {
+$(document).on('blur keyup', 'input[name="ssn-value"]', function () {
     const value = $(this).val();
 
     $(this).removeClass('is-valid is-invalid');
@@ -48,19 +49,18 @@ $(document).on('blur', 'input[name="ssn-value"]', function () {
     }
 });
 
-$(document).on('click','.delete-submit', function (event) {
+$(document).on('submit', '.delete-submit', function (event) {
     event.preventDefault();
     let tid = $('#ticket-no').val()
     let ssn = $('.ssn').val()
+
     window.location.assign(`http://127.0.0.1:8000/TicketDelete/${tid}/${ssn}`);
-
-
 })
 
 /**
  * @param {Object} data - Ticket information
  */
-function showTicketInfo(data){
+function showTicketInfo(data) {
 
     $('.ticket-info').show();
 
@@ -78,6 +78,12 @@ function showTicketInfo(data){
     $('.ticket-id').text(data['ticket_id']);
 }
 
+function showDeleteButton() {
+    $('.delete-button').append(
+        $('<input class="btn btn-danger delete" style="margin-top: 32px" type="button" value="Delete ticket">')
+    )
+}
+
 $('form').on('submit', function (event) {
     event.preventDefault();
 
@@ -88,6 +94,7 @@ $('form').on('submit', function (event) {
             },
             success: function (data) {
                 showTicketInfo(data);
+                showDeleteButton();
             }
         }
     )

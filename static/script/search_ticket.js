@@ -23,7 +23,7 @@ $(document).on('click', '.delete', function () {
         $('<div class="invalid-tooltip">請輸入正確的值.</div>')
     )
     $('.delete-ticket-submit').append(
-        $('<input class="btn btn-danger delete-submit" style="margin-top: 32px" type="button" value="Submit">')
+        $('<input class="btn btn-danger delete-submit" style="margin-top: 32px" type="submit" value="提交">')
     )
 })
 
@@ -50,10 +50,12 @@ $(document).on('blur keyup', 'input[name="ssn-value"]', function () {
     }
 });
 
-$(document).on('submit', '.delete-submit', function (event) {
+$('form.find-ssn').on('submit', function (event) {
     event.preventDefault();
     let tid = $('#ticket-no').val()
     let ssn = $('.ssn').val()
+
+    console.log(1234)
 
     window.location.assign(`http://127.0.0.1:8000/TicketDelete/${tid}/${ssn}`);
 })
@@ -80,12 +82,19 @@ function showTicketInfo(data) {
 }
 
 function showDeleteButton() {
+    $('.delete-button').empty()
     $('.delete-button').append(
-        $('<input class="btn btn-danger delete" style="margin-top: 32px" type="button" value="Delete ticket">')
+        $('<input class="btn btn-danger delete" style="margin-top: 32px" type="button" value="取消訂票">')
     )
 }
 
-$('form').on('submit', function (event) {
+function hideDeleteButton() {
+    $('.delete-button').empty()
+    $('.delete-ticket').empty()
+    $('.delete-ticket-submit').empty()
+}
+
+$('form.find-ticket').on('submit', function (event) {
     event.preventDefault();
 
     $.ajax({
@@ -95,11 +104,12 @@ $('form').on('submit', function (event) {
             },
             success: function (data) {
                 showTicketInfo(data);
-                showDeleteButton();
                 if(data['status']==='success'){
                     showTicketInfo(data);
+                    showDeleteButton();
                 }
                 else {
+                    hideDeleteButton();
                     $('#ticket-no')
                         .removeClass('is-valid')
                         .addClass('is-invalid');

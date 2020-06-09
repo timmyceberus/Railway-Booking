@@ -20,18 +20,12 @@ $(function () {
     });
 });
 
-$(document).on('blur', 'input[name="ssn-value"]', function () {
-    const value = $(this).val();
-    const ssn_type = $('input[name="ssn-type"]:checked').val();
-
-    $(this).removeClass('is-valid is-invalid');
-    if(isSsnValid(ssn_type, value)){
-        $(this).addClass('is-valid');
-    } else {
-        $(this).addClass('is-invalid');
-    }
-});
-
+/**
+ *
+ * @param SSN_type - Type which is ssn or passport number.
+ * @param value - The ssn value.
+ * @returns {boolean} - Valid SSN or not.
+ */
 function isSsnValid(SSN_type, value){
     if (value.length === 0) {
         return false;
@@ -44,8 +38,20 @@ function isSsnValid(SSN_type, value){
     }
 }
 
-$(document).on('blur', 'input[name="name"], input[name="ticket-count"], input[name="date"]', function () {
-    // const value = $(this).val();
+$(document).on('blur keyup click', 'input[name="ssn-type"], input[name="ssn-value"]', function () {
+    const ssnValue = $('input[name="ssn-value"]');
+    const value = ssnValue.val();
+    const ssnType = $('input[name="ssn-type"]:checked').val();
+
+    ssnValue.removeClass('is-valid is-invalid');
+    if(isSsnValid(ssnType, value)){
+        ssnValue.addClass('is-valid');
+    } else {
+        ssnValue.addClass('is-invalid');
+    }
+});
+
+$(document).on('blur keyup', 'input[name="name"], input[name="ticket-count"], input[name="date"]', function () {
 
     $(this).removeClass('is-valid is-invalid');
 

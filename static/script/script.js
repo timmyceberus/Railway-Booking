@@ -1,9 +1,8 @@
 let stations, counties;
 
-async function init() {
+$(async function () {
     stations = await getData();
     counties = getCounty();
-
 
     const beginBlock = $('.begin-block .county');
     const destBlock = $('.dest-block .county');
@@ -30,11 +29,7 @@ async function init() {
             $(`<button class="btn btn-outline-danger btn-sm county-btn" type="button">${county}</button>`).appendTo(destBlock);
         }
     });
-
-
-}
-
-init();
+});
 
 /**
  * @return {Promise} - Data of all stations.
@@ -64,8 +59,8 @@ function getCounty() {
 }
 
 /**
- * @param  {Array} stationCty -
- * @return {Array} -Get all station name which same city.
+ * @param  {String} stationCty - County name.
+ * @return {Array} - Get all station name which in the city.
  * */
 function getCtyStations(stationCty) {
     let ctyStations = [];
@@ -240,7 +235,7 @@ $('.search-form').on('submit', function (event) {
 
 });
 
-$(document).on('click','.book-ticket', function (event) {
+$(document).on('click', '.book-ticket', function (event) {
     event.preventDefault();
     bsId = $('.begin-text').val().split(' ');
     dsId = $('.dest-text').val().split(' ');

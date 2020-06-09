@@ -75,8 +75,52 @@ def search_train(request):
     return JsonResponse(trains_dict, safe=False)
 
 
-def insert_ticket(request, bsid, dsid, ssn_type, ssn_value, name, ticket_type, date, train_id, ticket_count):
+def ticket_delete(request, tid, ssn):
+    ssn_len = len(ssn)
+    print(ssn)
+    print(check_ssn_conflict(ssn))
+    if check_ssn_conflict(ssn) == 'foreigner':
+        cursor.execute('''
+            select pkind
+            from foreigner
+            where psp_no = '%s'
+                ''' % ssn)
+    elif check_ssn_conflict(ssn) == 'native':
+        cursor.execute('''
+            select pkind
+            from native
+            where ssn = '%s'
+            ''' % ssn)
+    else:
+        context = {
+            'alerm': "輸入(身分證/護照)號碼不存在"
+        }
+        return render(request, 'delete_ticket_false.html', context=context)
 
+    result = cursor.fetchall()
+    pkind = result[0][0]
+
+    cursor.execute('''
+            select *
+            from ticket
+            where tid = '%s' and pkind = '%s'
+            ''' % (tid, pkind))
+    result = cursor.fetchall()
+
+    if len(result) == 0:
+        context = {
+            'alerm': "輸入(身分證/護照)號碼錯誤"
+        }
+        return render(request, 'delete_ticket_false.html', context=context)
+
+    cursor.execute('''
+                delete from ticket
+                where tid = '%s' and pkind = '%s'
+            ''' % (tid, pkind))
+    return render(request, 'delete_ticket_success.html')
+
+
+def insert_ticket(request, bsid, dsid, ssn_type, ssn_value, name, ticket_type, date, train_id, ticket_count):
     ticket_count = int(ticket_count)
 
     if not check_ssn_conflict(ssn_value):
@@ -164,7 +208,6 @@ def check_ssn_conflict(ssn):
 
 
 def insert_person(name, train_id, ssn_type, ssn_value):
-
     cursor = connection.cursor()
     cursor.execute('''
                     select MAX(pkind)

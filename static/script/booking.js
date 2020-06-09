@@ -20,62 +20,42 @@ $(function () {
     });
 });
 
-$(document).on('input', '#ticket-count', function () {
-    if ($(this).val() !== '1') {
-        $('#car-number').attr('disabled', true).val('');
-        $('#seat-number').attr('disabled', true).val('');
-    } else {
-        $('#car-number').removeAttr('disabled');
-        $('#seat-number').removeAttr('disabled');
-    }
-});
-
 $(document).on('blur', 'input[name="ssn-value"]', function () {
     const value = $(this).val();
+    const ssn_type = $('input[name="ssn-type"]:checked').val();
 
     $(this).removeClass('is-valid is-invalid');
-    if (value.length === 0) {
+    if(isSsnValid(ssn_type, value)){
+        $(this).addClass('is-valid');
+    } else {
         $(this).addClass('is-invalid');
+    }
+});
+
+function isSsnValid(SSN_type, value){
+    if (value.length === 0) {
+        return false;
     } else if ($('input[name="ssn-type"]:checked').val() === 'ssn') {
-        if (value.search(/^[A-Z][\d]{9}$/) !== -1) {
-            $(this).addClass('is-valid');
-        } else {
-            $(this).addClass('is-invalid');
-        }
+        return value.search(/^[A-Z][\d]{9}$/) !== -1;
     } else if ($('input[name="ssn-type"]:checked').val() === 'passport') {
-        if (value.search(/^[A-Z0-9]{9}$/) !== -1) {
-            $(this).addClass('is-valid');
-        } else {
-            $(this).addClass('is-invalid');
-        }
+        return value.search(/^[A-Z0-9]{9}$/) !== -1;
     } else {
-        $(this).addClass('is-valid');
+        return true;
     }
-});
+}
 
-$(document).on('blur', 'input[name="name"]', function () {
-    const value = $(this).val();
+$(document).on('blur', 'input[name="name"], input[name="ticket-count"], input[name="date"]', function () {
+    // const value = $(this).val();
 
     $(this).removeClass('is-valid is-invalid');
 
-    if (value.length === 0) {
-        $(this).addClass('is-invalid');
-    } else {
-        $(this).addClass('is-valid');
-    }
-});
-
-$(document).on('blur', 'input[name="ticket-count"]', function () {
-    const value = $(this).val();
-
-    $(this).removeClass('is-valid is-invalid');
-
-    if (1 <= value && value <= 6) {
+    if ($(this)[0].checkValidity()) {
         $(this).addClass('is-valid');
     } else {
         $(this).addClass('is-invalid');
     }
 });
+
 
 $(document).on('click', '.submit-ticket', function (event) {
     event.preventDefault();
@@ -90,11 +70,14 @@ $(document).on('click', '.submit-ticket', function (event) {
     let trainId = $('input[name=train-id]').val();
     let ticketCount = $('input[name=ticket-count]').val();
 
-    console.log(ssnType)
-
-
-    window.location.assign(`http://127.0.0.1:8000/TicketInsert/${bsId[0]}/${dsId[0]}/${ssnType}` +
-        `/${ssnValue}/${name}/${scheduleKind}/${date}/${trainId}/${ticketCount}`);
+    // If fields is not validate, do not reload page
+    if (isSsnValid(ssnType, ssnValue) &&
+        name.length !== 0 &&
+        $('input[name=date]')[0].checkValidity() &&
+        $('input[name=ticket-count]')[0].checkValidity()) {
+        window.location.assign(`http://127.0.0.1:8000/TicketInsert/${bsId[0]}/${dsId[0]}/${ssnType}` +
+            `/${ssnValue}/${name}/${scheduleKind}/${date}/${trainId}/${ticketCount}`);
+    }
 });
 
 

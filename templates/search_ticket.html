@@ -1,10 +1,9 @@
 {% extends './template/base.html' %}
 {% load static %}
 {% block page-title %}訂票 - 台鐵訂票系統網{% endblock %}
-{% block bg-image %}Taroko.jpg{% endblock %}
-{#{% block head-space %}30px{% endblock %}#}
+{% block bg-image %}image/Taroko.jpg{% endblock %}
 {% block content %}
-    <link rel="stylesheet" href="/static/search_ticket.css">
+    <link rel="stylesheet" href="/static/style/search_ticket.css">
     <form class="needs-validation" novalidate>
         <div class="form-row">
             <div class="col-md-4"></div>
@@ -55,4 +54,4 @@
         </tbody>
     </table>
 {% endblock %}
-{% block script %}{% static "/search_ticket.js" %}{% endblock %}
+{% block script %}{% static "/script/search_ticket.js" %}{% endblock %}

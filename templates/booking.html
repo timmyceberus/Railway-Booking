@@ -1,10 +1,9 @@
 {% extends './template/base.html' %}
 {% load static %}
 {% block page-title %}訂票 - 台鐵訂票系統網{% endblock %}
-{% block bg-image %}Taroko.jpg{% endblock %}
-{#{% block head-space %}30vh{% endblock %}#}
+{% block bg-image %}image/Taroko.jpg{% endblock %}
 {% block content %}
-    <link rel="stylesheet" href="/static/booking.css">
+    <link rel="stylesheet" href="/static/style/booking.css">
     {% include './component/form.html' with bgst=full_begin_station dsst=full_dest_station show_in_index=False on_top='0' only %}
     <form method="post" style="color:white;" class="needs-validation" novalidate>
         {% csrf_token %}
@@ -48,6 +47,9 @@
             <div class="form-group col-md-3">
                 <label for="date">日期</label>
                 <input type="date" class="form-control" name="date" id="date" required>
+                <div class="invalid-tooltip">
+                    請輸入正確的日期
+                </div>
             </div>
             <div class="form-group col-md-2">
                 <label for="ticket-count">票數</label>
@@ -63,4 +65,4 @@
     <script>let getOnTime = "{{ get_on_time }}";</script>
 {% endblock %}
 
-{% block script %}{% static "/booking.js" %}{% endblock %}
+{% block script %}{% static "/script/booking.js" %}{% endblock %}

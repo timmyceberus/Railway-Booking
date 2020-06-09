@@ -95,7 +95,7 @@ def ticket_delete(request, tid, ssn):
         context = {
             'alerm': "輸入(身分證/護照)號碼不存在"
         }
-        return render(request, 'delete_ticket_false.html', context=context)
+        return render(request, 'delete_ticket_fail.html', context=context)
 
     result = cursor.fetchall()
     pkind = result[0][0]
@@ -111,7 +111,7 @@ def ticket_delete(request, tid, ssn):
         context = {
             'alerm': "輸入(身分證/護照)號碼錯誤"
         }
-        return render(request, 'delete_ticket_false.html', context=context)
+        return render(request, 'delete_ticket_fail.html', context=context)
 
     cursor.execute('''
                 delete from ticket

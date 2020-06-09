@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.db import connection
+from django.core.exceptions import ObjectDoesNotExist
 
 import re
 import random
@@ -201,7 +202,7 @@ def booking(request, tid, bsid, dsid):
         begin_station = Station.objects.get(sid=bsid)
         dest_station = Station.objects.get(sid=dsid)
         train = Train.objects.get(tid=tid)
-    except:
+    except ObjectDoesNotExist:
         return render(request, '404 not found.html')
 
     begin_name = begin_station.sname
@@ -233,11 +234,11 @@ def search_ticket(request):
 def find_ticket_from_DB(request):
     tid = request.GET.get('tid')
 
-    ticket_info = Ticket.objects.get(tid=tid)
-
     # Cannot found the ticket from tid
-    if ticket_info is None:
-        return JsonResponse(request, {'status': 'fail'})
+    try:
+        ticket_info = Ticket.objects.get(tid=tid)
+    except ObjectDoesNotExist:
+        return JsonResponse({'status': 'fail'})  # Can't find the ticket from the database
 
     ticket_id = ticket_info.tid
     get_on_station_id = ticket_info.geton_id
@@ -247,7 +248,6 @@ def find_ticket_from_DB(request):
     seat_number = ticket_info.sno
     tdate = ticket_info.tdate
     ticket_type = '單程' if ticket_info.ttype == 1 else "來回"
-
 
     get_on_station = Station.objects.get(sid=get_on_station_id).sname
     get_off_station = Station.objects.get(sid=get_off_station_id).sname
@@ -262,6 +262,7 @@ def find_ticket_from_DB(request):
                  - datetime.combine(date.today(), get_on_time)).total_seconds() // 30)
 
     context = {
+        'status': 'success',  # Find the ticket from the database
         'date': str(tdate).replace('-', '.'),
         'ticket_id': ticket_id,
         'train_id': take_train_id,

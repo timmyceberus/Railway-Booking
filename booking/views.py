@@ -208,13 +208,16 @@ def booking(request, tid, bsid, dsid):
     dest_name = dest_station.sname
     train_name = train_names[train.kind]
 
+    get_on_time = StopAt.objects.get(sid=bsid, tid=tid).arrtime
+
     context = {
         'train_id': tid,
         'train_name': train_name,
         'begin_station_id': bsid,
         'full_begin_station': bsid + ' ' + begin_name,
         'dest_station_id': dsid,
-        'full_dest_station': dsid + ' ' + dest_name
+        'full_dest_station': dsid + ' ' + dest_name,
+        'get_on_time': get_on_time
     }
     return render(request, 'booking.html', context=context)
 

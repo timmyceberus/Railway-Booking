@@ -1,10 +1,22 @@
 $(function () {
-    const today = moment().format('YYYY-MM-DD');
-    const oneMonthLater = moment().add(1, 'months').format('YYYY-MM-DD');
+
+    // Cannot book the ticket which is departure
+    getOnTime = moment(getOnTime, "HH:mm");
+    const current = moment().toDate().getTime();
+    const isPast = getOnTime.isBefore(current)
+
+    const today = moment();
+    const oneMonthLater = moment().add(1, 'months');
+
+    if (isPast) {
+        today.add(1, 'days');
+        oneMonthLater.add(1, 'days');
+    }
+
     $('input[type=date]').attr({
-        'value': today,
-        'min': today,
-        'max': oneMonthLater
+        'value': today.format('YYYY-MM-DD'),
+        'min': today.format('YYYY-MM-DD'),
+        'max': oneMonthLater.format('YYYY-MM-DD')
     });
 });
 
@@ -65,7 +77,7 @@ $(document).on('blur', 'input[name="ticket-count"]', function () {
     }
 });
 
-$(document).on('click','.submit-ticket', function (event) {
+$(document).on('click', '.submit-ticket', function (event) {
     event.preventDefault();
     let bsId = $('.begin-text').val().split(' ');
     let dsId = $('.dest-text').val().split(' ');
@@ -82,7 +94,7 @@ $(document).on('click','.submit-ticket', function (event) {
 
 
     window.location.assign(`http://127.0.0.1:8000/TicketInsert/${bsId[0]}/${dsId[0]}/${ssnType}` +
-    `/${ssnValue}/${name}/${scheduleKind}/${date}/${trainId}/${ticketCount}`);
+        `/${ssnValue}/${name}/${scheduleKind}/${date}/${trainId}/${ticketCount}`);
 });
 
 

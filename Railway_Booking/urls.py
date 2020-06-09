@@ -26,6 +26,7 @@ urlpatterns = [
     path('allstations/', views.get_all_stations),
     path('TrainSchedule/', views.get_train_schedule),
     path('TicketInsert/<bsid>/<dsid>/<ssn_type>/<ssn_value>/<name>/<ticket_type>/<date>/<train_id>/<ticket_count>', views.insert_ticket),
+    path('TicketDelete/<tid>/<ssn>', views.ticket_delete),
     path('SearchTrain/', views.search_train),
     path('SearchTicket/', views.search_ticket),
     path('GetTicket/', views.find_ticket_from_DB)

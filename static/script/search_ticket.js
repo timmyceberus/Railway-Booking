@@ -11,13 +11,16 @@ $('#ticket-no').on('blur change', function () {
 })
 
 $(document).on('click','.delete', function () {
+    $('.delete-ticket').empty()
     $('.delete-ticket').append(
         $('<input id="ssn" type="radio" name="ssn-type" value="ssn" checked>'),
         $('<label for="ssn" style="margin-right: 10px">身份證字號</label>'),
         $('<input id="passport" type="radio" name="ssn-type" value="passport">'),
         $('<label for="passport">護照號碼</label>'),
         $('<input type="text" class="form-control ssn" name="ssn-value" required>'),
-        $('<div class="invalid-tooltip">請輸入正確的值.</div>'),
+        $('<div class="invalid-tooltip">請輸入正確的值.</div>')
+    )
+    $('.delete-ticket-submit').append(
         $('<input class="btn btn-danger delete-submit" style="margin-top: 32px" type="button" value="submit">')
     )
 })

@@ -19,7 +19,7 @@ $(document).on('click', '.delete', function () {
         $('<label for="ssn" style="margin-right: 10px">身份證字號</label>'),
         $('<input id="passport" type="radio" name="ssn-type" value="passport">'),
         $('<label for="passport">護照號碼</label>'),
-        $('<input type="text" class="form-control ssn" name="ssn-value" required>'),
+        $('<input type="text" class="form-control ssn" name="ssn-value" placeholder="輸入訂票人的身份證/護照號碼" required>'),
         $('<div class="invalid-tooltip">請輸入正確的值.</div>')
     )
     $('.delete-ticket-submit').append(
@@ -27,38 +27,54 @@ $(document).on('click', '.delete', function () {
     )
 })
 
-$(document).on('blur keyup', 'input[name="ssn-value"]', function () {
-    const value = $(this).val();
+$(document).on('blur keyup click', 'input[name="ssn-type"], input[name="ssn-value"]', function () {
+    const ssnValue = $('input[name="ssn-value"]');
+    const value = ssnValue.val();
+    const ssnType = $('input[name="ssn-type"]:checked').val();
 
-    $(this).removeClass('is-valid is-invalid');
-    if (value.length === 0) {
-        $(this).addClass('is-invalid');
-    } else if ($('input[name="ssn-type"]:checked').val() === 'ssn') {
-        if (value.search(/^[A-Z][\d]{9}$/) !== -1) {
-            $(this).addClass('is-valid');
-        } else {
-            $(this).addClass('is-invalid');
-        }
-    } else if ($('input[name="ssn-type"]:checked').val() === 'passport') {
-        if (value.search(/^[A-Z0-9]{9}$/) !== -1) {
-            $(this).addClass('is-valid');
-        } else {
-            $(this).addClass('is-invalid');
-        }
+    ssnValue.removeClass('is-valid is-invalid');
+    if (isSsnValid(ssnType, value)) {
+        ssnValue.addClass('is-valid');
     } else {
-        $(this).addClass('is-valid');
+        ssnValue.addClass('is-invalid');
     }
 });
 
 $('form.find-ssn').on('submit', function (event) {
     event.preventDefault();
-    let tid = $('#ticket-no').val()
-    let ssn = $('.ssn').val()
 
-    console.log(1234)
+    const ticketNumber = $('#ticket-no').val();
 
-    window.location.assign(`http://127.0.0.1:8000/TicketDelete/${tid}/${ssn}`);
-})
+    let ssnType, ssnValue;
+    $(this).serializeArray().forEach(element => { // Get values from 'form'
+        if (element['name'] === 'ssn-type')
+            ssnType = element['value'];
+        if (element['name'] === 'ssn-value')
+            ssnValue = element['value'];
+    });
+
+    if(isSsnValid(ssnType, ssnValue)) {
+        window.location.assign(`http://127.0.0.1:8000/TicketDelete/${ticketNumber}/${ssnValue}`);
+    }
+});
+
+/**
+ *
+ * @param SSN_type - Type which is ssn or passport number.
+ * @param value - The ssn value.
+ * @returns {boolean} - Valid SSN or not.
+ */
+function isSsnValid(SSN_type, value) {
+    if (value.length === 0) {
+        return false;
+    } else if ($('input[name="ssn-type"]:checked').val() === 'ssn') {
+        return value.search(/^[A-Z][\d]{9}$/) !== -1;
+    } else if ($('input[name="ssn-type"]:checked').val() === 'passport') {
+        return value.search(/^[A-Z0-9]{9}$/) !== -1;
+    } else {
+        return true;
+    }
+}
 
 /**
  * @param {Object} data - Ticket information
@@ -82,10 +98,11 @@ function showTicketInfo(data) {
 }
 
 function showDeleteButton() {
-    $('.delete-button').empty()
-    $('.delete-button').append(
-        $('<input class="btn btn-danger delete" style="margin-top: 32px" type="button" value="取消訂票">')
-    )
+    $('.delete-button')
+        .empty()
+        .append(
+            $('<input class="btn btn-danger delete" style="margin-top: 32px" type="button" value="取消訂票">')
+        )
 }
 
 function hideDeleteButton() {

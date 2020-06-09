@@ -93,7 +93,7 @@ def ticket_delete(request, tid, ssn):
             ''' % ssn)
     else:
         context = {
-            'alerm': "輸入(身分證/護照)號碼不存在"
+            'alarm': "輸入(身分證/護照)號碼不存在"
         }
         return render(request, 'delete_ticket_fail.html', context=context)
 
@@ -109,7 +109,7 @@ def ticket_delete(request, tid, ssn):
 
     if len(result) == 0:
         context = {
-            'alerm': "輸入(身分證/護照)號碼錯誤"
+            'alarm': "輸入(身分證/護照)號碼錯誤"
         }
         return render(request, 'delete_ticket_fail.html', context=context)
 

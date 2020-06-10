@@ -172,21 +172,21 @@ function createRouteModal(trainRoute, tid, tname) {
 
             $('<tr class="bg-primary" style="color: white; opacity: 0.8">').append(
                 $('<td>').text(`${trainR['sname']}`),
-                $('<td>').text(`${trainR['arrtime']}`),
-                $('<td>').text(`${trainR['deptime']}`)
+                $('<td>').text(`${trainR['arrtime'].slice(0, -3)}`),
+                $('<td>').text(`${trainR['deptime'].slice(0, -3)}`)
             ).appendTo(modelTable)
 
         } else if ($('.dest-text').val().search(trainR['sname']) >= 0) {
             $('<tr class="bg-danger" style="color: white; opacity: 0.8">').append(
                 $('<td>').text(`${trainR['sname']}`),
-                $('<td>').text(`${trainR['arrtime']}`),
-                $('<td>').text(`${trainR['deptime']}`)
+                $('<td>').text(`${trainR['arrtime'].slice(0, -3)}`),
+                $('<td>').text(`${trainR['deptime'].slice(0, -3)}`)
             ).appendTo(modelTable)
         } else {
             $('<tr>').append(
                 $('<td>').text(`${trainR['sname']}`),
-                $('<td>').text(`${trainR['arrtime']}`),
-                $('<td>').text(`${trainR['deptime']}`)
+                $('<td>').text(`${trainR['arrtime'].slice(0, -3)}`),
+                $('<td>').text(`${trainR['deptime'].slice(0, -3)}`)
             ).appendTo(modelTable)
         }
     });

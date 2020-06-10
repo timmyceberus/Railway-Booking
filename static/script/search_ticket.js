@@ -123,7 +123,16 @@ $('form.find-ticket').on('submit', function (event) {
                 showTicketInfo(data);
                 if(data['status']==='success'){
                     showTicketInfo(data);
-                    showDeleteButton();
+
+                    // If the train has not departure, you can delete the ticket
+                    console.log(moment(data['date'] + " " + data['get_on_time']));
+                    console.log(moment())
+                    console.log(moment(data['date'] + " " + data['get_on_time']).isAfter(moment()))
+                    if(moment(data['date'] + " " + data['get_on_time']).isAfter(moment())){
+                        showDeleteButton();
+                    } else {
+                        hideDeleteButton();
+                    }
                 }
                 else {
                     hideDeleteButton();

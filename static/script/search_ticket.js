@@ -101,7 +101,7 @@ function showDeleteButton() {
     $('.delete-button')
         .empty()
         .append(
-            $('<input class="btn btn-danger delete" style="margin-top: 32px" type="button" value="取消訂票">')
+            $('<input class="btn btn-danger delete" style="margin-top: 32px" type="button" value="取消車票">')
         )
 }
 

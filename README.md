@@ -1,4 +1,21 @@
-Railway Booking系統建置步驟
+# Railway Booking
+
+Screenshot
+--
+
+**火車班次查詢系統**
+![](https://i.imgur.com/yMH3K1I.gif)
+
+**班次詳細資料**
+![](https://i.imgur.com/IINSnHi.png)
+
+**訂票成功頁面**
+![](https://i.imgur.com/QUtTQR1.png)
+
+**火車查詢車票系統**
+![](https://i.imgur.com/zGbbYLF.png)
+
+How to build
 ---
 1. 首先，透過下面連結內的指令先將資料庫建起來。
 https://gist.github.com/benebsiny/00217e389b811ebb8e6c1733708ca7d1
